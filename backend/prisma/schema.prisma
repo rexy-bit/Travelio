@@ -1,0 +1,103 @@
+//prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+
+model User{
+    id  String  @id @default(uuid())
+    firstName String 
+    lastName String
+    email String @unique
+    password String
+    favorites Destination[] @relation("UserFavorites")
+
+    reservation Reservation[]
+
+    createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+}
+
+model Destination{
+   id String @id @default(uuid())
+   city String
+   country String
+   description String
+     favoritedBy User[] @relation("UserFavorites")
+   images String[] @default([])
+
+   trips Trip[]
+
+   createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+} 
+
+model Trip{
+    id String @id @default(uuid())
+    title String
+    destinationId String
+    destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade) 
+
+    hotelId String
+    hotel Hotel @relation(fields: [hotelId], references: [id])
+
+    aller DateTime
+    retour DateTime
+    duree Int
+
+    description String
+    prix Float
+    places Int
+    conditionsVoyage String[] @default([])
+
+    reservations Reservation[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Reservation{
+    id String @id @default(uuid())
+    userId String
+    tripId String
+    status StatutReservation @default(EN_ATTENTE)
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+
+model Hotel {
+  id String @id @default(uuid())
+  nom String
+  etoiles Int
+  pointsPositifs String[]
+
+  trips Trip[] // relation inverse
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum StatutReservation {
+  EN_ATTENTE
+  CONFIRMEE
+  ANNULEE
+  TERMINEE
+  NON_PRESENT
+  REMBOURSEE
+}
+
+
+
+
