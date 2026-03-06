@@ -18,12 +18,18 @@ model User{
     email String @unique
     password String
     favorites Destination[] @relation("UserFavorites")
+    role Role @default(USER)
 
     reservation Reservation[]
 
     createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model Destination{

@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { getDestinations } from "../controllers/destination.controller.js";
 
 
 const destinationRouter = Router();
 
-destinationRouter.get('/', (req, res)=>res.sed("Get destinations"));
+destinationRouter.get('/', getDestinations);
 
 destinationRouter.post('/add', (req, res)=>res.send("Add destination"));
 

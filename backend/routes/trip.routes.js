@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { getTrips } from "../controllers/trip.controller.js";
 
 
 
 const tripRouter = Router();
 
 
-tripRouter.get('/', (req, res)=>res.send("Get trips"));
+tripRouter.get('/', getTrips);
 
 tripRouter.post('/add', (req, res)=>res.send("Add trip"));
 
