@@ -1,12 +1,19 @@
 import prisma from "../config/prisma.js"
 
 
-
 export const getTrips = async(req , res , next) => {
 
     try{
 
-        const trips = await prisma.destination.findMany();
+        const trips = await prisma.destination.findMany({
+            include : {
+                destination : true,
+                hotel : true
+            }
+        });
+
+       
+
 
         return res.status(200).json({
             success : true,
