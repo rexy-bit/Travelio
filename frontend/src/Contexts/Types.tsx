@@ -4,7 +4,7 @@ export interface Destination{
 
     id : string;
     city : string;
-    county : string;
+    country : string;
     description : string;
     images : string[];
     createdAt : Date;

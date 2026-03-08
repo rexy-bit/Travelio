@@ -51,7 +51,7 @@ const Header = () => {
 initial={{ x: 250, opacity: 0 }}
 animate={{ x: 0, opacity: 1 }}
 exit={{ x: 250, opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }} className="hidden max-[600px]:flex flex-col  h-[calc(100%-60px)] p-5 text-[#1B4332] bg-white mt-[60px] gap-3 shadow-2xl z-50 fixed right-0 w-[200px]">
+      transition={{ duration: 0.3, ease: "easeInOut" }} className="hidden max-[600px]:flex flex-col  h-[calc(100%-60px)] p-5 text-[#1B4332] bg-white gap-3 shadow-2xl z-50 fixed right-0 w-[200px]">
 
                  <a href="/" style={{
                     fontSize : location.pathname === "/" ? "18px" : "16px",

@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { getDestinations } from "../controllers/destination.controller.js";
+import { getDestination, getDestinations } from "../controllers/destination.controller.js";
 
 
 const destinationRouter = Router();
 
 destinationRouter.get('/', getDestinations);
+
+destinationRouter.get('/:id', getDestination);
 
 destinationRouter.post('/add', (req, res)=>res.send("Add destination"));
 

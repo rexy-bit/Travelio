@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+
+body{
+    padding-top: 60px;
+
+}
+*{
+    box-sizing : border-box;
+}
+
+html{
+    scroll-behavior:  smooth;
+}

@@ -9,7 +9,9 @@ interface DestinationsContextType{
     destinations : Destination[];
     loadingDestinations : boolean;
     getDestinations : ()=>Promise<void>
-
+    getDestination : (id : string)=>Promise<void>
+    loadingDestination : boolean;
+    destinationDetail : Destination | null;
 }
 
 
@@ -22,7 +24,9 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
     const [destinations, setDestinations] = useState<Destination[]>([]);
 
     const [loadingDestinations, setLoadingDestinations] = useState<boolean>(false);
+    const [loadingDestination, setLoadingDestination] = useState<boolean>(false);
 
+   const [destinationDetail, setDestinationDetail] = useState<Destination | null>(null)
 
     const getDestinations = async() => {
 
@@ -50,12 +54,38 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
         }
     }
 
+    const getDestination = async(id : string) => {
+
+        setLoadingDestination(true);
+        try{
+
+          const res = await fetch(`http://localhost:5000/api/v1/destination/${id}`,{
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json"
+            }
+          });
+
+           const data = await res.json();
+
+           if(!res.ok){
+              throw new Error(data.error || data.message || "Error in fetching destinationDetail");
+           }
+
+           setDestinationDetail(data.data);
+        }catch(err){
+            console.error(err);
+        }finally{
+            setLoadingDestination(false);
+        }
+    }
+
     useEffect(()=>{
        getDestinations();
     }, []);
 
     return(
-        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations}}>
+        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, getDestination, destinationDetail, loadingDestination}}>
             {children}
         </DestinationsContext.Provider>
     )
