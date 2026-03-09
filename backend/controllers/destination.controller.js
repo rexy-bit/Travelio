@@ -5,11 +5,33 @@ export const getDestinations = async(req , res , next) => {
 
     try{
 
-        const destinations = await prisma.destination.findMany();
+       const destinations = await prisma.destination.findMany({
+  select: {
+    id: true,
+    city: true,
+    country: true,
+    continent: true,
+    latitude: true,
+    longitude: true,
+    description: true,
+    bestSeason: true,
+    currency: true,
+    language: true,
+    timeZone: true,
+    rating: true,
+    averageTemperature: true,
+    attractions: true,
+    activities: true,
+    travelTips: true,
+    images: true,
+    createdAt: true,
+    updatedAt: true
+  }
+});
 
         return res.status(200).json({
             success : true,
-            message : "Destination fetched successfully",
+            message : "Destinations fetched successfully",
             data : destinations
         });
 

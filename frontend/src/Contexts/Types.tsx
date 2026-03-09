@@ -5,11 +5,23 @@ export interface Destination{
     id : string;
     city : string;
     country : string;
+    continent : string;
+    latitude : number;
+    longitude : number;
     description : string;
+    bestSeason : string;
+    currency  :string;
+    language : string;
+    timeZone : string;
+    attractions : string[];
+    activities : string[];
+    travelTips : string[];
+    rating : number;
+    averageTemperature : number;
     images : string[];
     createdAt : Date;
     updatedAt : Date;
-
+    
 }
 
 

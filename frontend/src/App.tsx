@@ -6,12 +6,14 @@ import Home from './Pages/Home'
 import { DestinationsProvider } from './Contexts/DestinationsContext'
 import Destinations from './Pages/Destinations'
 import DestinationDetail from './Pages/DestinationDetail'
+import { AuthProvider } from './Contexts/AuthContext'
 
 function App() {
   
 
   return (
     <DestinationsProvider>
+      <AuthProvider>
     <Routes>
 
       <Route path='/' element={
@@ -37,6 +39,7 @@ function App() {
       }/>
 
     </Routes>
+    </AuthProvider>
     </DestinationsProvider>
   )
 }
