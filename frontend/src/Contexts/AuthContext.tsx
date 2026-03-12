@@ -21,6 +21,8 @@ export const AuthProvider = ({children} : {children : React.ReactNode}) => {
         return saved ? JSON.parse(saved) : null;
     });
 
+    
+
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     useEffect(()=>{

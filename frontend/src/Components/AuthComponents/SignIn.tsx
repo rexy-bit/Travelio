@@ -2,11 +2,16 @@ import { memo } from "react"
 import { useAuthContext } from "../../Contexts/AuthContext";
 
 
-const SignIn = () => {
+const SignIn = ({setShowSignIn} : {setShowSignIn : (b : boolean)=>void}) => {
 
-    const {signIn} = useAuthContext();
+    const {signIn, errorMsg} = useAuthContext();
+
+    
 
     const handleSubmit = async(e : React.FormEvent<HTMLFormElement>) =>{
+
+
+        e.preventDefault();
 
         const form = e.currentTarget;
 
@@ -28,39 +33,49 @@ const SignIn = () => {
     }
 
     return(
-        <div>
-            <h2>
+        <div className="flex flex-col p-5 bg-white rounded-[10px] shadow-2xl mt-10 w-[800px] max-[900px]:w-[500px] max-[550px]:w-[320px] mb-10">
+            <h2 className="text-[17px] font-bold leading-5">
                 Connectez-vous à votre compte pour gérer vos réservations
             </h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="flex flex-col mt-5 gap-5">
 
-                <div>
-                    <p>Email</p>
+                <div className="flex flex-col gap-1">
+                    <p className="font-bold text-[15px]">Email</p>
                     <input 
                     type="email" 
                     name="email"
-                    className=""
+                    className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                     placeholder="Email"
                     required
                     />
                 </div>
 
-
-                <div>
-                    <p>Mot de Passe</p>
+                <div className="flex flex-col gap-1">
+                    <p className="font-bold text-[15px]">Mot de Passe</p>
                     <input 
                     type="password" 
                     placeholder="Password"
-                    className=""
+                    name="password"
+                    className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                     required
                     />
                 </div>
 
-                <button>
+                <div className="h-[20px] w-full flex justify-center items-center text-[15px]">
+                    {errorMsg && <p className="text-[15px] text-red-600">{errorMsg}</p>}
+                </div>
+
+                <button 
+                type="submit"
+                className="bg-[#1B4332] text-white h-[40px] rounded-[5px] font-bold cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 ">
                     Connexion
                 </button>
             </form>
+
+            <div className="flex row items-center gap-3 mt-5 font-[500] max-[550px]:flex-col">
+                Vous n'avez pas de compte ? <span className="underline text-gray-600 cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60" onClick={()=>setShowSignIn(prev => !prev)}>Créez un compte</span>
+            </div>
         </div>
     )
 }

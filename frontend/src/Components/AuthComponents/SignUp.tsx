@@ -1,9 +1,9 @@
 import { memo } from "react"
 import { useAuthContext } from "../../Contexts/AuthContext";
 
-const SignUp = () => {
+const SignUp = ({setShowSignIn} : {setShowSignIn : (b : boolean)=>void}) => {
 
-    const {signUp} = useAuthContext();
+    const {signUp, errorMsg} = useAuthContext();
 
     const handleSubmit = async(e : React.FormEvent<HTMLFormElement>) => {
 
@@ -48,71 +48,85 @@ const SignUp = () => {
 
 
     return(
-        <div>
-           <h1>Créez votre compte pour accéder à toutes vos fonctionnalités et gérer facilement vos réservations.</h1>
+        <div className="flex flex-col p-5 bg-white rounded-[10px] shadow-2xl mt-10 w-[800px] max-[900px]:w-[500px] max-[550px]:w-[320px] mb-10">
+           <h1 className="text-[17px] font-bold leading-5">Créez votre compte pour accéder à toutes vos fonctionnalités et gérer facilement vos réservations.</h1>
 
-           <form onSubmit={handleSubmit}>
+           <form onSubmit={handleSubmit} className="flex flex-col mt-5 gap-5 w-full">
 
-             <div>
-                <p>Prenom</p>
+             <div className="flex flex-col gap-1">
+                <p className="font-bold text-[15px]">Prenom</p>
                 <input 
                 type="text" 
                 name="firstName"
                 placeholder="Prenom"
-                className=""
+                className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                 required
                 />
              </div>
 
-             <div>
-                <p>Nom</p>
+             <div className="flex flex-col gap-1">
+                <p className="font-bold text-[15px]">Nom</p>
                 <input 
                 type="text" 
-                name="Nom"
+                name="lastName"
                 placeholder="Last Name"
-                className=""
+                className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                 required
                 />
              </div>
 
-             <div>
-                <p>Email</p>
+             <div className="flex flex-col gap-1">
+                <p className="font-bold text-[15px]">Email</p>
                 <input 
                 type="email" 
                 name="email"
                 placeholder="Email"
-                className=""
+                className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                 required
                 />
 
              </div>
 
-             <div>
-                <p>Mot de passe</p>
+             <div className="flex flex-col gap-1">
+                <p className="font-bold text-[15px]">Mot de passe</p>
 
                 <input 
                 type="password" 
                 name="password1"
-                className=""
+                placeholder="Mot de Passe"
+                className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
                 required
                 />
              </div>
 
-             <div>
-                <p>Confirmation Mot de passe</p>
+             <div className="flex flex-col gap-1">
+                <p className="font-bold text-[15px]">Confirmation Mot de passe</p>
 
                 <input 
                 type="password" 
                 name="password2"
-                className=""
+              
+                className="p-2 bg-gray-100 text-[15px] rounded-[5px]"
+                placeholder="Confirmation Mot de passe"
                 required
                 />
              </div>
 
-             <button type="submit">
+                  <div className="h-[20px] w-full flex justify-center items-center text-[15px]">
+                    {errorMsg && <p className="text-[15px] text-red-600">{errorMsg}</p>}
+                </div>
+             <button 
+             type="submit"
+                className="bg-[#1B4332] text-white h-[40px] rounded-[5px] font-bold cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 "
+             >
                 Créer un compte
              </button>
            </form>
+
+                <div className="flex row items-center gap-3 mt-5 font-[500] max-[550px]:flex-col">
+                Vous avez déja un compte ? <span className="underline text-gray-600 cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60" onClick={()=>setShowSignIn(prev => !prev)}>Connéctez vous</span>
+            </div>
+           
         </div>
     )
 }

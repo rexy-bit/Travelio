@@ -7,6 +7,7 @@ import { DestinationsProvider } from './Contexts/DestinationsContext'
 import Destinations from './Pages/Destinations'
 import DestinationDetail from './Pages/DestinationDetail'
 import { AuthProvider } from './Contexts/AuthContext'
+import Profile from './Pages/Profile'
 
 function App() {
   
@@ -37,6 +38,13 @@ function App() {
           <DestinationDetail/>
         </>
       }/>
+
+       <Route path='/profile' element={
+        <>
+        <Header/>
+          <Profile/>
+        </>
+       }/>
 
     </Routes>
     </AuthProvider>
