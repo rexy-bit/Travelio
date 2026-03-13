@@ -1,3 +1,4 @@
+import { success } from "zod";
 import prisma from "../config/prisma.js"
 
 
@@ -71,4 +72,29 @@ export const getDestination = async(req , res, next) => {
 }
 
 
+export const getUniqueCitiesAndCountries = async(req, res, next) => {
 
+    try{
+
+        const destinations = await prisma.destination.findMany({
+            select : {
+                city : true,
+                country : true
+            }
+        });
+
+        const cities = [...new Set(destinations.map(d => d.city))];
+        const countries = [...new Set(destinations.map(d => d.country))];
+
+        return res.status(200).json({
+            success : true,
+            data : {
+                cities,
+                countries
+            }
+        });
+    }catch(err)
+    {
+           next(err);
+    }
+}

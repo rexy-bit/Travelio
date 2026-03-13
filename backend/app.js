@@ -24,7 +24,7 @@ app.get('/', (req, res)=>res.send("Welcome to Travelio"));
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/destination', destinationRouter);
-app.use('/api/v1/trip', tripRouter);
+app.use('/api/v1/trips', tripRouter);
 
 
 app.listen(PORT, async() => {

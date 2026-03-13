@@ -76,4 +76,12 @@ export interface User{
 }
 
 
+export interface FilterTripType{
 
+    city : string;
+    country : string;
+    duree : number;
+    minPrice : number;
+    maxPrice : number;
+
+}

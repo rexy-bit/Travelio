@@ -6,7 +6,7 @@ import { getTrips } from "../controllers/trip.controller.js";
 const tripRouter = Router();
 
 
-tripRouter.get('/', getTrips);
+tripRouter.post('/', getTrips);
 
 tripRouter.post('/add', (req, res)=>res.send("Add trip"));
 

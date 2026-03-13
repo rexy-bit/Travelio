@@ -12,6 +12,10 @@ interface DestinationsContextType{
     getDestination : (id : string)=>Promise<void>
     loadingDestination : boolean;
     destinationDetail : Destination | null;
+    uniqueCities : string[];
+    uniqueCountries : string[];
+    
+
 }
 
 
@@ -25,6 +29,8 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
 
     const [loadingDestinations, setLoadingDestinations] = useState<boolean>(false);
     const [loadingDestination, setLoadingDestination] = useState<boolean>(false);
+    const [uniqueCities, setUniqueCities] = useState<string[]>([]);
+    const [uniqueCountries, setUniqueCountries] = useState<string[]>([]);
 
    const [destinationDetail, setDestinationDetail] = useState<Destination | null>(null)
 
@@ -80,12 +86,40 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
         }
     }
 
+    const getUnique = async() => {
+
+        try{
+
+            const res = await fetch("http://localhost:5000/api/v1/destination/unique", {
+                method : "GET"
+            });
+
+            const data = await res.json();
+
+            if(!res.ok){
+                throw new Error("Error in fetchong unique coties and countries");
+            }
+
+            setUniqueCities(data.data.cities);
+            setUniqueCountries(data.data.countries);
+            console.log('Cities : ', data.data.cities);
+            console.log('Countries : ', data.data.countries);
+            
+        }catch(err){
+            console.error(err);
+        }
+    }
+
     useEffect(()=>{
        getDestinations();
     }, []);
 
+    useEffect(()=>{
+        getUnique();
+    }, []);
+
     return(
-        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, getDestination, destinationDetail, loadingDestination}}>
+        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, getDestination, destinationDetail, loadingDestination, uniqueCities, uniqueCountries}}>
             {children}
         </DestinationsContext.Provider>
     )
