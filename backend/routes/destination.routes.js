@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { getDestination, getDestinations , getUniqueCitiesAndCountries} from "../controllers/destination.controller.js";
+import { getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination} from "../controllers/destination.controller.js";
 
 
 const destinationRouter = Router();
 
 destinationRouter.get('/', getDestinations);
 
+destinationRouter.get('/search', searchDestination);
 destinationRouter.get('/unique', getUniqueCitiesAndCountries);
 
 destinationRouter.get('/:id', getDestination);

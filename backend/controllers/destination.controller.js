@@ -1,4 +1,4 @@
-import { success } from "zod";
+import { date, success } from "zod";
 import prisma from "../config/prisma.js"
 
 
@@ -96,5 +96,89 @@ export const getUniqueCitiesAndCountries = async(req, res, next) => {
     }catch(err)
     {
            next(err);
+    }
+}
+
+
+export const searchDestination = async(req, res, next) => {
+
+    try{
+
+        const {search} = req.body;
+
+        if(!search || search.trim() === ""){
+            const allDestinations = await prisma.destination.findMany({
+                  select: {
+    id: true,
+    city: true,
+    country: true,
+    continent: true,
+    latitude: true,
+    longitude: true,
+    description: true,
+    bestSeason: true,
+    currency: true,
+    language: true,
+    timeZone: true,
+    rating: true,
+    averageTemperature: true,
+    attractions: true,
+    activities: true,
+    travelTips: true,
+    images: true,
+    createdAt: true,
+    updatedAt: true
+  }
+            });
+
+            return res.status(200).json({
+                success : true,
+                message : "Search Result",
+                data: allDestinations
+            });
+
+        }
+
+        const regex = new RegExp(search, "i");
+
+       const destinations = await prisma.destination.findMany({
+
+      where: {
+        OR: [
+
+          { city: { contains: search, mode: "insensitive" } },
+          { country: { contains: search, mode: "insensitive" } },
+          { continent: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+          { bestSeason: { contains: search, mode: "insensitive" } },
+          { currency: { contains: search, mode: "insensitive" } },
+          { language: { contains: search, mode: "insensitive" } },
+          { timeZone: { contains: search, mode: "insensitive" } },
+          { travelTips: { contains: search, mode: "insensitive" } },
+
+          {
+            attractions: {
+              has: search
+            }
+          },
+
+          {
+            activities: {
+              has: search
+            }
+          }
+
+        ]
+      }
+
+    });
+
+    return res.status(200).json({
+        success : true,
+        message : "Search result",
+        data : destinations
+    });
+    }catch(err){
+        next(err);
     }
 }

@@ -4,6 +4,31 @@ import { useDestinationsContext } from "../Contexts/DestinationsContext";
 import Galerie from "../Components/DestinationsComponents/Galerie";
 import { motion, AnimatePresence } from "framer-motion";
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }
+  }
+};
+
+const listItemVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.4, ease: "easeOut" }
+  }
+};
+
 const DestinationDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,16 +68,6 @@ const DestinationDetail = () => {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.1, duration: 0.5 } },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
     <section className="flex flex-col min-h-screen bg-gray-200 items-center w-full">
       {loadingDestination ? (
@@ -61,24 +76,30 @@ const DestinationDetail = () => {
         <div className="font-bold text-[1.2em] mt-10 text-center">Destination not found</div>
       ) : (
         <>
+          {/* Titre */}
           <motion.h1
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-[1.7em] font-bold mt-20 underline"
           >
             {destinationDetail.city}, {destinationDetail.country}
           </motion.h1>
 
+          {/* Bouton Galerie */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => setShowGalerie(true)}
             className="mt-7 bg-[#1B4332] text-white font-bold w-[100px] h-[35px] rounded-[10px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60"
           >
             Galerie
           </motion.button>
 
+          {/* Slider */}
           <div className="flex flex-row justify-center items-center gap-5 mt-3 max-[600px]:gap-3">
             <motion.div
               onClick={slideLeft}
@@ -94,10 +115,10 @@ const DestinationDetail = () => {
                   key={currentImg}
                   src={destinationDetail.images[currentImg]}
                   alt=""
-                  initial={{ opacity: 0, x: 50 }}
+                  initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, x: -30 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                   className="w-[700px] h-[500px] object-contain max-[900px]:w-[500px] max-[900px]:h-[300px] max-[700px]:w-[290px] max-[700px]:h-[200px]"
                 />
               </AnimatePresence>
@@ -113,6 +134,7 @@ const DestinationDetail = () => {
             </motion.div>
           </div>
 
+          {/* Cards info */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -165,7 +187,9 @@ const DestinationDetail = () => {
                 className="mt-5 flex flex-col gap-2"
               >
                 {destinationDetail.attractions.map((at, idx) => (
-                  <motion.li key={idx} variants={itemVariants}>- {at}</motion.li>
+                  <motion.li key={idx} variants={listItemVariants}>
+                    - {at}
+                  </motion.li>
                 ))}
               </motion.ul>
             </motion.div>
@@ -184,13 +208,15 @@ const DestinationDetail = () => {
                 className="mt-5 flex flex-col gap-2"
               >
                 {destinationDetail.travelTips.map((tip, idx) => (
-                  <motion.li key={idx} variants={itemVariants}>- {tip}</motion.li>
+                  <motion.li key={idx} variants={listItemVariants}>
+                    - {tip}
+                  </motion.li>
                 ))}
               </motion.ul>
             </motion.div>
 
             {/* Map */}
-            <motion.div variants={itemVariants} className="h-96 w-full">
+            <motion.div variants={itemVariants} className="h-96 w-full flex justify-center">
               <iframe
                 src={`https://www.google.com/maps?q=${destinationDetail.latitude},${destinationDetail.longitude}&hl=fr&z=14&output=embed`}
                 className="w-[600px] h-[400px] max-[700px]:w-[400px] max-[700px]:h-[300px] max-[500px]:w-[300px] max-[500px]:h-[200px] rounded-lg shadow-md"
@@ -200,9 +226,13 @@ const DestinationDetail = () => {
             </motion.div>
           </motion.div>
 
+          {/* Bouton voir voyages */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             className="bg-[#1B4332] mt-10 px-5 text-white font-[500] h-[40px] rounded-lg mb-10 cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60"
           >
             Voir les voyages vers {destinationDetail.city}
@@ -210,12 +240,14 @@ const DestinationDetail = () => {
         </>
       )}
 
+      {/* Galerie overlay */}
       <AnimatePresence>
         {showGalerie && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50"
           >
             <Galerie destination={destinationDetail!} setShowPop={setShowGalerie} />
@@ -223,9 +255,13 @@ const DestinationDetail = () => {
         )}
       </AnimatePresence>
 
+      {/* Bouton Back */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, x: -15 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
         onClick={() => navigate(-1)}
         className="absolute top-19 left-5 bg-[#1B4332] text-white w-[90px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 h-[35px] text-[15px] font-[600] rounded-full"
       >
