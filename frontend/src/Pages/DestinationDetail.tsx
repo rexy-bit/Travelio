@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDestinationsContext } from "../Contexts/DestinationsContext";
 import Galerie from "../Components/DestinationsComponents/Galerie";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTripsContext } from "../Contexts/TripsContext";
 
 const containerVariants = {
   hidden: {},
@@ -33,6 +34,7 @@ const DestinationDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { destinationDetail, getDestination, loadingDestination } = useDestinationsContext();
+
 
   useEffect(() => {
     getDestination(id);
@@ -67,6 +69,9 @@ const DestinationDetail = () => {
       setCurrentImg((prev) => prev + 1);
     }
   };
+
+
+  const {setFilterTripsData, filterTripsData} = useTripsContext();
 
   return (
     <section className="flex flex-col min-h-screen bg-gray-200 items-center w-full">
@@ -226,8 +231,15 @@ const DestinationDetail = () => {
             </motion.div>
           </motion.div>
 
-          {/* Bouton voir voyages */}
           <motion.button
+           onClick={()=>{
+            setFilterTripsData({
+              ...filterTripsData,
+              country : destinationDetail.country,
+              city : destinationDetail.city
+            });
+            navigate('/trips');
+           }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -255,7 +267,7 @@ const DestinationDetail = () => {
         )}
       </AnimatePresence>
 
-      {/* Bouton Back */}
+      
       <motion.button
         initial={{ opacity: 0, x: -15 }}
         animate={{ opacity: 1, x: 0 }}

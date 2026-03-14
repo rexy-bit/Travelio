@@ -3,6 +3,7 @@ import type { FilterTripType, Trip } from "./Types";
 
 
 
+
 interface TripsContextType{
     trips : Trip[];
     loadingTrips : boolean;
@@ -10,6 +11,9 @@ interface TripsContextType{
     filterTripsData : FilterTripType;
     setFilterTripsData : (f : FilterTripType)=>void;
     resetFilterTrips : ()=>void;
+    getTrip : (id : string)=>Promise<void>
+    tripDetail : Trip | null;
+    loadingTripDetail : boolean;
 }
 
 const TripsContext = createContext<TripsContextType | null>(null);
@@ -26,6 +30,9 @@ export const TripsProvider = ({children} : {children : React.ReactNode}) => {
            maxPrice :0
         }
     });
+
+    const [tripDetail, setTripDetail] = useState<Trip | null>(null);
+    const [loadingTripDetail, setLoadingTripDetail] = useState<boolean>(false);
 
    const  resetFilterTrips = () => {
         setFilterTripsData({city : "", country : "", duree : 0,
@@ -66,13 +73,37 @@ export const TripsProvider = ({children} : {children : React.ReactNode}) => {
     }
 
     
+    const getTrip = async(id : string) => {
 
+        setLoadingTripDetail(true);
+        try{
+
+            const res = await fetch(`http://localhost:5000/api/v1/trips/trip/${id}`, {
+                method : "GET",
+               
+            });
+
+            const data = await res.json();
+
+            if(!res.ok){
+                throw new Error(data.error || data.message || "Error in getting trip");
+            }
+
+            setTripDetail(data.data);
+            console.log('Trip Detail : ', data.data);
+
+        }catch(err){
+            console.error(err);
+        }finally{
+            setLoadingTripDetail(false);
+        }
+    }
 
     useEffect(()=>{
          getTrips();
     }, [filterTripsData]);
 
-    return <TripsContext.Provider value={{loadingTrips, trips, getTrips, filterTripsData, setFilterTripsData, resetFilterTrips}}>
+    return <TripsContext.Provider value={{loadingTrips, trips, getTrips, filterTripsData, setFilterTripsData, resetFilterTrips, tripDetail, loadingTripDetail, getTrip}}>
         {children}
     </TripsContext.Provider>
 }

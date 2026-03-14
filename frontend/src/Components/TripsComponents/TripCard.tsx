@@ -2,6 +2,7 @@ import { memo } from "react"
 import { motion } from "framer-motion"
 import type { Trip } from "../../Contexts/Types";
 import StarsRating from "./StarsRating";
+import { useNavigate } from 'react-router-dom';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -9,7 +10,10 @@ const cardVariants = {
   exit:   { opacity: 0, scale: 0.85, transition: { duration: 0.2 } }
 };
 
+
 const TripCard = ({ trip }: { trip: Trip }) => {
+
+    const navigate = useNavigate();
   return (
     <motion.div
          variants={cardVariants}
@@ -18,6 +22,7 @@ const TripCard = ({ trip }: { trip: Trip }) => {
       exit="exit"
       whileHover={{ y: -6, boxShadow: "0 25px 40px rgba(0,0,0,0.15)" }}
       whileTap={{ scale: 0.97 }}
+      onClick={()=>navigate(`/trip/${trip.id}`)}
       className="w-[300px] bg-white rounded-[10px] shadow-2xl cursor-pointer"
     >
       <img

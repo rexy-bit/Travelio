@@ -6,7 +6,7 @@ const destinationRouter = Router();
 
 destinationRouter.get('/', getDestinations);
 
-destinationRouter.get('/search', searchDestination);
+destinationRouter.post('/search', searchDestination);
 destinationRouter.get('/unique', getUniqueCitiesAndCountries);
 
 destinationRouter.get('/:id', getDestination);

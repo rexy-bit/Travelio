@@ -154,7 +154,9 @@ export const searchDestination = async(req, res, next) => {
           { currency: { contains: search, mode: "insensitive" } },
           { language: { contains: search, mode: "insensitive" } },
           { timeZone: { contains: search, mode: "insensitive" } },
-          { travelTips: { contains: search, mode: "insensitive" } },
+          { travelTips: { 
+            has : search
+          } },
 
           {
             attractions: {

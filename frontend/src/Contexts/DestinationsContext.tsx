@@ -14,10 +14,11 @@ interface DestinationsContextType{
     destinationDetail : Destination | null;
     uniqueCities : string[];
     uniqueCountries : string[];
-    
-
+    searchDestinationsResult : Destination[];
+    loadingSearchDestinations : boolean;
+    searchDestinationsInput : string;
+    setSearchDestinationsInput : (s : string)=>void;
 }
-
 
 const DestinationsContext = createContext<DestinationsContextType | null>(null);
 
@@ -26,6 +27,19 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
 
 
     const [destinations, setDestinations] = useState<Destination[]>([]);
+    const [searchDestinationsResult, setSearchDestinationsResult] = useState<Destination[]>([]);
+    const [loadingSearchDestinations, setLoadingSearchDestinations] = useState<boolean>(false);
+    const [searchDestinationsInput, setSearchDestinationsInput ] = useState<string>(()=>{
+        const saved = localStorage.getItem('searchDestinationsInput');
+        
+        return saved ? JSON.parse(saved) : "";
+    });
+
+    
+    useEffect(()=>{
+        localStorage.setItem('searchDestinationsInput', JSON.stringify(searchDestinationsInput));
+    }, [searchDestinationsInput]);
+
 
     const [loadingDestinations, setLoadingDestinations] = useState<boolean>(false);
     const [loadingDestination, setLoadingDestination] = useState<boolean>(false);
@@ -110,6 +124,40 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
         }
     }
 
+
+    const getSearchResult = async() => {
+        setLoadingSearchDestinations(true);
+        try{
+
+            const res = await fetch("http://localhost:5000/api/v1/destination/search", {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({search : searchDestinationsInput})
+            });
+
+            const data = await res.json();
+
+            if(!res.ok){
+               throw new Error(data.error || data.message || "Error in getting search result");
+            }
+
+            setSearchDestinationsResult(data.data);
+            console.log("search result : ", data.data);
+
+        }catch(err){
+            console.error(err);
+        }finally{
+            setLoadingSearchDestinations(false);
+        }
+    }
+
+    useEffect(()=>{
+        if(searchDestinationsInput && searchDestinationsInput !== ""){
+            getSearchResult();
+        }
+    }, [searchDestinationsInput]);
     useEffect(()=>{
        getDestinations();
     }, []);
@@ -119,11 +167,14 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
     }, []);
 
     return(
-        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, getDestination, destinationDetail, loadingDestination, uniqueCities, uniqueCountries}}>
+        <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, 
+        getDestination, destinationDetail, loadingDestination, uniqueCities, uniqueCountries
+        ,searchDestinationsResult, loadingSearchDestinations,searchDestinationsInput,setSearchDestinationsInput
+        }}>
             {children}
         </DestinationsContext.Provider>
     )
-}
+} 
 
 
 export const useDestinationsContext = () => {

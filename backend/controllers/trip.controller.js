@@ -1,4 +1,6 @@
+import { date, success } from "zod";
 import prisma from "../config/prisma.js"
+import { tr } from "zod/v4/locales";
 
 
 export const getTrips = async(req , res , next) => {
@@ -58,5 +60,43 @@ export const getTrips = async(req , res , next) => {
     }catch(err){
         next(err);
     }
+}
+
+
+
+export const getTrip = async(req , res, next) => {
+
+  try{
+
+     const {id} = req.params;
+
+     const trip = await prisma.trip.findUnique({
+      where : {
+        id : id
+      },
+      include  : {
+        destination : true,
+        hotel: true
+      }
+     });
+
+     if(!trip){
+      return res.status(404).json({
+        success : false,
+        message :"Error trip not found",
+        date : trip
+      });
+     }
+
+     return res.status(200).json({
+      success : true,
+      message : "trip found",
+      data : trip
+     });
+
+  }catch(err){
+    next(err);
+  }
+
 }
 

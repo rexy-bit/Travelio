@@ -10,6 +10,8 @@ import { AuthProvider } from './Contexts/AuthContext'
 import Profile from './Pages/Profile'
 import { TripsProvider } from './Contexts/TripsContext'
 import Trips from './Pages/Trips'
+import SearchDestinations from './Pages/SearchDestinations'
+import TripDetails from './Pages/TripDetails'
 
 function App() {
   
@@ -53,6 +55,21 @@ function App() {
         <>
           <Header/>
           <Trips/>
+        </>
+       }/>
+
+
+       <Route path='/search' element={
+        <>
+          <Header/>
+          <SearchDestinations/>
+        </>
+       }/>
+
+       <Route path='/trip/:id' element={
+        <>
+          <Header/>
+          <TripDetails/>
         </>
        }/>
 
