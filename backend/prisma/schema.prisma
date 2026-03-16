@@ -62,16 +62,31 @@ model Trip {
   hotel            Hotel         @relation(fields: [hotelId], references: [id])
 }
 
+model Passenger{
+  id String @id @default(uuid())
+  firstName String
+  lastName String
+  age Int
+  reservationId String
+
+  reservation Reservation @relation(fields : [reservationId], references: [id], onDelete: Cascade)
+}
+
 model Reservation {
   id        String            @id @default(uuid())
   userId    String
   tripId    String
   status    StatutReservation @default(EN_ATTENTE)
+  passengers Passenger[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
   trip      Trip              @relation(fields: [tripId], references: [id], onDelete: Cascade)
   user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tripId])
 }
+
+
 
 model Hotel {
   id             String   @id @default(uuid())

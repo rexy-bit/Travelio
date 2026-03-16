@@ -76,7 +76,7 @@ const TripDetails = () => {
                         <h1 className="text-[1.8em] font-bold ">À propos du Voyage</h1>
 
                         <div className="flex flex-row justify-center items-center gap-20 mt-10 max-[1200px]:gap-10 max-[900px]:flex-col">
-                            <div className="w-[400px] text-[18px] leading-7 max-[900px]:text-center">
+                            <div className="w-[400px] text-[18px] leading-7 max-[900px]:text-center max-[500px]:w-[320px]">
                                 {tripDetail.description}
                             </div>
                             <img src={tripDetail.destination.images[1]} 
