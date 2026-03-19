@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from "react"
 import { useTripsContext } from "../Contexts/TripsContext";
-import { useNavigate, useParams, Navigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {motion} from "framer-motion"
-import { tr } from "framer-motion/m";
+
 import StarsRating from "../Components/TripsComponents/StarsRating";
-import DestinationCard from "../Components/DestinationsComponents/DestinationCard";
+
 
 const TripDetails = () => {
 
@@ -66,6 +66,11 @@ const TripDetails = () => {
                           </div>
 
                           <div className="text-white text-[1.5em] font-black mt-5">À partir de {tripDetail.prix}&euro;</div>
+
+                          <button className="bg-gray-100 text-green-800 w-[150px] py-2 font-bold rounded-[10px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60"
+                           onClick={()=>navigate(`/reservation/${tripDetail.id}`)}>
+                            Réserver
+                          </button>
                         </div>
 
                         <img src={tripDetail.destination.images[0]} className="w-[500px] max-[1200px]:w-[400px] max-[500px]:w-[300px]" alt="" />
@@ -131,6 +136,10 @@ const TripDetails = () => {
                         </div>
 
                           <img src={tripDetail.destination.images[2]} className="w-[500px] mt-10 max-[550px]:w-[300px]" alt="" />
+                             <button className="bg-[#1B4332] text-gray-200 text-[15px] w-[500px] mt-10 max-[550px]:w-[300px] py-4 font-bold rounded-[10px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60"
+                           onClick={()=>navigate(`/reservation/${tripDetail.id}`)}>
+                             Passez votre réservation dés maintenant pour vous et votre famille
+                          </button>
                          <div className=" bg-white w-[500px] rounded-[10px] shadow-2xl max-[550px]:w-[400px] max-[450px]:w-[300px] mt-10">
               <button
                 className="w-full text-left px-4 py-3 font-medium flex justify-between items-center"

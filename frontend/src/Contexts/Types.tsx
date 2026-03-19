@@ -34,6 +34,7 @@ export interface Hotel{
     updatedAt : Date;
 }
 
+
 export interface Trip{
 
     id : string;
@@ -54,15 +55,31 @@ export interface Trip{
 }
 
 
+export interface Passenger{
+    id? : string;
+     firstName : string,
+          lastName : string,
+          age : number;
+          dateNaiss: string,
+          passeportNum : string;
+          genre: string;
+          nationality : string
+    
+}
 
 export interface Reservation{
     id : string;
     userId : User;
     tripId : Trip;
+    passengers : Passenger[];
+    totalPrice : number;
     status : string;
     createdAt : Date;
     updatedAt : Date;
+    user? : User;
+    trip? : Trip;
 }
+
 
 export interface User{
     id : string;
@@ -71,7 +88,7 @@ export interface User{
     email : string;
     password? : string;
     role : string;
-       createdAt : Date;
+    createdAt : Date;
     updatedAt : Date;
 }
 

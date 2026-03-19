@@ -7,14 +7,14 @@ import jwt from "jsonwebtoken"
 const generateTokens = (userId) => {
 
     const accessToken = jwt.sign(
-        {userId}
+        {id : userId}
         , ACCESS_TOKEN_SECRET,
         {expiresIn : ACCESS_TOKEN_EXPIRATION}
       );
 
 
       const refreshToken = jwt.sign(
-        {userId},
+        {id : userId},
         REFRESH_TOKEN_SECRET,
         {expiresIn : REFRESH_TOKEN_EXPIRATION}
       );
@@ -184,7 +184,7 @@ export const signIn = async(req, res, next) => {
             });
          }
 
-                 const {accessToken, refreshToken} = generateTokens(existingUser._id);
+                 const {accessToken, refreshToken} = generateTokens(existingUser.id);
 
         setCookies(res, accessToken, refreshToken);
 

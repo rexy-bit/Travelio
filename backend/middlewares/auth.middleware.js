@@ -19,7 +19,7 @@ const authorize = async (req, res, next) => {
         const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
 
         const user = await prisma.user.findUnique({
-          where: { id: decoded.userId }
+          where: { id: decoded.id }
         });
 
         if (!user) {
@@ -48,7 +48,7 @@ const authorize = async (req, res, next) => {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: decodedRefresh.userId }
+      where: { id: decodedRefresh.id }
     });
 
     if (!user) {
@@ -57,7 +57,7 @@ const authorize = async (req, res, next) => {
 
     // 3️⃣ Générer nouveau accessToken
     const newAccessToken = jwt.sign(
-      { userId: user.id },
+      { id: user.id },
       ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );

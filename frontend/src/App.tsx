@@ -12,6 +12,10 @@ import { TripsProvider } from './Contexts/TripsContext'
 import Trips from './Pages/Trips'
 import SearchDestinations from './Pages/SearchDestinations'
 import TripDetails from './Pages/TripDetails'
+import { ReservationsProvider } from './Contexts/ReservationsContext'
+import Reservation from './Pages/Reservation'
+import Reservations from './Pages/Reservations'
+import ReservationDetails from './Pages/ReservationDetails'
 
 function App() {
   
@@ -20,6 +24,7 @@ function App() {
     <DestinationsProvider>
       <AuthProvider>
         <TripsProvider>
+          <ReservationsProvider>
     <Routes>
 
       <Route path='/' element={
@@ -73,7 +78,33 @@ function App() {
         </>
        }/>
 
+
+       <Route path='/reservation/:id' element={
+        <>
+          <Header/>
+          <Reservation/>
+        </>
+       }/>
+
+
+       <Route path='/reservations' element={
+        <>
+          <Header/>
+          <Reservations/>
+        </>
+       }/>
+
+
+       <Route path='/reservationDetails/:id' element={
+        <>
+          <Header/>
+          <ReservationDetails/>
+        </>
+       }/>
+
     </Routes>
+
+    </ReservationsProvider>
     </TripsProvider>
     </AuthProvider>
     </DestinationsProvider>
