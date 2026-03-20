@@ -7,6 +7,8 @@ import authRouter from "./routes/auth.routes.js";
 import destinationRouter from "./routes/destination.routes.js";
 import tripRouter from "./routes/trip.routes.js";
 import reservationsRouter from "./routes/reservations.routes.js";
+import favoritesRouter from "./routes/favorites.routes.js";
+import usersRouter from "./routes/users.routes.js";
 
  const app = express();
 
@@ -28,6 +30,8 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/destination', destinationRouter);
 app.use('/api/v1/trips', tripRouter);
 app.use('/api/v1/reservations', reservationsRouter);
+app.use('/api/v1/favorites', favoritesRouter);
+app.use('/api/v1/users', usersRouter);
 
 
 app.listen(PORT, async() => {

@@ -4,11 +4,13 @@ import type { User } from "./Types";
 
 interface AuthContextType{
     user : User | null; 
+    setUser : (u : User)=>void;
     signIn : (email : string, password : string)=>Promise<void>
     signUp : (firstName : string, lastName : string, email : string, password1: string, password2 : string)=>Promise<void>
     signOut : ()=>Promise<void>
     loadingAuth : boolean;
     errorMsg : string | null;
+    getCurrentUser: ()=>Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -21,6 +23,7 @@ export const AuthProvider = ({children} : {children : React.ReactNode}) => {
         return saved ? JSON.parse(saved) : null;
     });
 
+
     
 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -30,6 +33,30 @@ export const AuthProvider = ({children} : {children : React.ReactNode}) => {
     }, [user]);
 
     const [loadingAuth, setLoadingAuth] = useState<boolean>(false);
+
+
+    const getCurrentUser = async() => {
+
+        try{
+
+            const res = await fetch("http://localhost:5000/api/v1/auth/currentUser", {
+                method : "GET",
+                credentials : "include"
+            });
+
+            const data = await res.json();
+
+            if(!res.ok){
+                throw new Error(data.error || data.message || "Error in getting current user");
+                
+            }
+
+            setUser(data.data);
+            console.log('current user: ', data.data);
+        }catch(err){
+            console.error(err);
+        }
+    }
 
     const signIn = async(email : string, password : string) => {
 
@@ -126,8 +153,16 @@ export const AuthProvider = ({children} : {children : React.ReactNode}) => {
 
     }
 
+    /*
+    useEffect(()=>{
+        getCurrentUser();
+    }, []);
+    */
 
-    return <AuthContext.Provider value={{signIn, signUp, signOut, user, loadingAuth, errorMsg}}>
+
+    return <AuthContext.Provider value={{signIn, signUp, signOut, user, loadingAuth, errorMsg
+        , getCurrentUser, setUser
+    }}>
         {children}
     </AuthContext.Provider>
 

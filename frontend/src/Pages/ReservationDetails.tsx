@@ -10,6 +10,7 @@ import SectionHotel from "../Components/ReservationDetailsCOmponents/SectionHote
 import SectionPassagers from "../Components/ReservationDetailsCOmponents/SectionPassagers";
 import SectionConditions from "../Components/ReservationDetailsCOmponents/SectionConditions";
 import SectionResume from "../Components/ReservationDetailsCOmponents/SectionResume";
+import ConfianceReservation from "../Components/ReservationDetailsCOmponents/ConfianceReservation";
 
 const ReservationDetails = () => {
 
@@ -84,7 +85,7 @@ const ReservationDetails = () => {
           >
 
             {/* LEFT SIDE */}
-            <div className="flex flex-col gap-5 border-r max-[900px]:pr-0 max-[900px]:border-none border-r-gray-400 pr-4 order-1 max-[900px]:order-2">
+            <div className="flex flex-col gap-5 border-r max-[900px]:pr-0 max-[900px]:border-none border-r-gray-400 pr-4 order-1 max-[900px]:order-2 max-[900px]:mt-5">
 
               <motion.div variants={item} whileHover={{ scale: 1.02 }}>
                 <SectionVoyage reservation={reservationDetails} />
@@ -109,9 +110,10 @@ const ReservationDetails = () => {
             </div>
 
             {/* RIGHT SIDE */}
-            <div className="order-2 max-[900px]:order-1">
+            <div className="order-2 max-[900px]:order-1 flex flex-col gap-5 max-[900px]:border-b max-[900px]:border-b-gray-400 max-[900px]:pb-8">
             
                 <SectionResume reservation={reservationDetails} />
+                <ConfianceReservation/>
               
             </div>
 

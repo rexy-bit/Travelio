@@ -1,3 +1,4 @@
+import { success } from "zod";
 import { ACCESS_TOKEN_EXPIRATION, ACCESS_TOKEN_SECRET, NODE_ENV, REFRESH_TOKEN_EXPIRATION, REFRESH_TOKEN_SECRET } from "../config/env.js";
 import prisma from "../config/prisma.js";
 import bcrypt from "bcrypt"
@@ -123,7 +124,10 @@ export const signUp = async(req, res, next) => {
         firstName : newUser.firstName,
         lastName : newUser.lastName,
         email : newUser.email,
-        role : newUser.role
+                    
+            createdAt : newUser.createdAt,
+        role : newUser.role,
+        favorites : newUser.favorites
        };
 
        return res.status(201).json({
@@ -165,7 +169,10 @@ export const signIn = async(req, res, next) => {
        }
 
         const existingUser = await prisma.user.findUnique({
-            where : {email}
+            where : {email},
+            include : {
+                favorites : true
+            }
         });
 
          if(!existingUser){
@@ -192,7 +199,10 @@ export const signIn = async(req, res, next) => {
             id : existingUser.id,
             firstName : existingUser.firstName,
             lastName : existingUser.lastName,
-            role : existingUser.role
+            email : existingUser.email,
+            createdAt : existingUser.createdAt,
+            role : existingUser.role,
+            favorites : existingUser.favorites
         }
 
         return res.status(200).json({
@@ -232,5 +242,39 @@ export const signOut = async(req , res, next) =>  {
     }catch(err){
         next(err);
 
+    }
+}
+
+
+export const getCurrentUser = async(req, res, next) => {
+
+    try{
+
+        const userId = req.user.id;
+
+        const currentUser = await prisma.user.findUnique({
+            where : {
+                id : userId
+            },
+            include: {
+                favorites : true
+            }
+        });
+
+
+        if(!currentUser){
+            return res.status(404).json({
+                success : false,
+                message : "Error user not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: false,
+            message : "User got",
+            data: currentUser
+        });
+    }catch(err){
+        next(err);
     }
 }

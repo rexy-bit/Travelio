@@ -16,6 +16,9 @@ import { ReservationsProvider } from './Contexts/ReservationsContext'
 import Reservation from './Pages/Reservation'
 import Reservations from './Pages/Reservations'
 import ReservationDetails from './Pages/ReservationDetails'
+import { FavoritesProvider } from './Contexts/FavoritesContext'
+import Favorites from './Pages/Favorites'
+import { UsersProvider } from './Contexts/UsersContext'
 
 function App() {
   
@@ -25,6 +28,8 @@ function App() {
       <AuthProvider>
         <TripsProvider>
           <ReservationsProvider>
+            <FavoritesProvider>
+              <UsersProvider>
     <Routes>
 
       <Route path='/' element={
@@ -102,8 +107,17 @@ function App() {
         </>
        }/>
 
+       <Route path='/favoris' element={
+        <>
+          <Header/>
+          <Favorites/>
+        </>
+       }/>
+
     </Routes>
 
+            </UsersProvider>
+        </FavoritesProvider>
     </ReservationsProvider>
     </TripsProvider>
     </AuthProvider>

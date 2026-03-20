@@ -71,7 +71,6 @@ model Passenger{
    passeportNum String
    genre String
    nationality String
- 
   reservationId String
 
   reservation Reservation @relation(fields : [reservationId], references: [id], onDelete: Cascade)

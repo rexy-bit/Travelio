@@ -17,7 +17,7 @@ const SectionHotel = ({reservation} : {reservation : Reservation}) => {
              <div className="mt-1">
                 {reservation.trip?.hotel.pointsPositifs.map((a)=>{
                     return(
-                        <p className="text-[15px]">- {a}</p>
+                        <p className="text-[15px]" key={a}>- {a}</p>
                     )
                 })}
              </div>

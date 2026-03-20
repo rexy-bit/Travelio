@@ -78,7 +78,7 @@ const Reservations = () => {
                  : 
                  <div className="flex flex-col items-center mt-15">
                      <h1 className="text-[1.5em] font-bold">Mes reservations</h1>
-                     <p className="text-[17px] mt-5 text-gray-800">
+                     <p className="text-[17px] mt-5 text-gray-800 text-center">
                         Consultez et gérez l’ensemble de vos réservations de voyages.
                      </p>
 
@@ -100,7 +100,7 @@ const Reservations = () => {
                         </div>
                      </div>
 
-                     <div className="flex flex-row items-center gap-5 mt-10">
+                     <div className="flex flex-row items-center gap-5 mt-10 mb-15">
                         {userReservations.map((r)=>{
                             return(
                                 <ReservationCard

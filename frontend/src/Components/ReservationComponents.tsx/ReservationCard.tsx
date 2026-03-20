@@ -28,7 +28,7 @@ const ReservationCard = ({reservation} : {reservation :  Reservation}) => {
       initial="hidden"
       animate="show"
       whileHover={{ y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
+     
       style={{ boxShadow: "0 10px 25px rgba(0,0,0,0.15)" }}
       className="w-[340px] bg-white rounded-[10px] ">
 
@@ -70,9 +70,6 @@ const ReservationCard = ({reservation} : {reservation :  Reservation}) => {
                     <i className="fa-solid fa-eye"></i> Voir détails
                 </button>
 
-                <button className="bg-red-800/80 text-white w-[120px] rounded-[10px] font-[500] py-2 cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 text-[15px]">
-                    <i className="fa-solid fa-ban"></i> Annuler
-                </button>
             </div>
         </motion.div>
     )

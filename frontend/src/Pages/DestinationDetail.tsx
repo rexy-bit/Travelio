@@ -1,9 +1,11 @@
-import { memo, useEffect, useState } from "react";
+import { memo,  useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDestinationsContext } from "../Contexts/DestinationsContext";
 import Galerie from "../Components/DestinationsComponents/Galerie";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTripsContext } from "../Contexts/TripsContext";
+import { useAuthContext } from "../Contexts/AuthContext";
+import { useFavoritesContext } from "../Contexts/FavoritesContext";
 
 const containerVariants = {
   hidden: {},
@@ -70,6 +72,11 @@ const DestinationDetail = () => {
     }
   };
 
+  const {user} = useAuthContext();
+  const {toggleFavorite} = useFavoritesContext();
+
+  const isFavorite = user?.favorites.find((f)=>f.id === destinationDetail?.id);
+
 
   const {setFilterTripsData, filterTripsData} = useTripsContext();
 
@@ -103,6 +110,11 @@ const DestinationDetail = () => {
           >
             Galerie
           </motion.button>
+
+          <div onClick={()=>toggleFavorite(destinationDetail.id)} 
+          className="bg-black/20 cursor-pointer mt-10 h-[50px] w-[50px] rounded-full flex justify-center items-center">
+              {!isFavorite ? <i className="fa-regular fa-star text-xl"></i> : <i className="fa-solid fa-star text-xl text-yellow-600"></i>}
+          </div>
 
           {/* Slider */}
           <div className="flex flex-row justify-center items-center gap-5 mt-3 max-[600px]:gap-3">
