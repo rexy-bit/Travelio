@@ -1,7 +1,6 @@
 
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import Header from './Components/HomeComponents/Header'
 import Home from './Pages/Home'
 import { DestinationsProvider } from './Contexts/DestinationsContext'
 import Destinations from './Pages/Destinations'
@@ -19,10 +18,14 @@ import ReservationDetails from './Pages/ReservationDetails'
 import { FavoritesProvider } from './Contexts/FavoritesContext'
 import Favorites from './Pages/Favorites'
 import { UsersProvider } from './Contexts/UsersContext'
+import UserRoute from './Layouts/UserRoute'
+import PublicLayout from './Layouts/PublicLayout'
+import AdminRoute from './Layouts/AdminRoute'
+import AdminLayout from './Layouts/AdminLayout'
 
 function App() {
   
-
+     
   return (
     <DestinationsProvider>
       <AuthProvider>
@@ -32,16 +35,22 @@ function App() {
               <UsersProvider>
     <Routes>
 
+      <Route element={
+        <UserRoute>
+          <PublicLayout/>
+        </UserRoute>
+      }>
+
       <Route path='/' element={
         <>
-          <Header/>
+          
           <Home/>
         </> 
       }/>
 
       <Route path='/destinations' element={
         <>
-          <Header/>
+          
 
           <Destinations/>
         </>
@@ -49,21 +58,21 @@ function App() {
 
       <Route path='/destination/:id' element={
         <>
-          <Header/>
+          
           <DestinationDetail/>
         </>
       }/>
 
        <Route path='/profile' element={
         <>
-        <Header/>
+        
           <Profile/>
         </>
        }/>
 
        <Route path='/trips' element={
         <>
-          <Header/>
+          
           <Trips/>
         </>
        }/>
@@ -71,14 +80,14 @@ function App() {
 
        <Route path='/search' element={
         <>
-          <Header/>
+          
           <SearchDestinations/>
         </>
        }/>
 
        <Route path='/trip/:id' element={
         <>
-          <Header/>
+          
           <TripDetails/>
         </>
        }/>
@@ -86,7 +95,7 @@ function App() {
 
        <Route path='/reservation/:id' element={
         <>
-          <Header/>
+          
           <Reservation/>
         </>
        }/>
@@ -94,7 +103,7 @@ function App() {
 
        <Route path='/reservations' element={
         <>
-          <Header/>
+          
           <Reservations/>
         </>
        }/>
@@ -102,17 +111,27 @@ function App() {
 
        <Route path='/reservationDetails/:id' element={
         <>
-          <Header/>
+          
           <ReservationDetails/>
         </>
        }/>
 
        <Route path='/favoris' element={
         <>
-          <Header/>
           <Favorites/>
         </>
        }/>
+
+       </Route>
+
+
+       <Route path='/dashboard/*' element={
+        <AdminRoute>
+          <AdminLayout/>
+        </AdminRoute>
+       }>
+      
+       </Route>
 
     </Routes>
 

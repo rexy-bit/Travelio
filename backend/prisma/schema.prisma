@@ -41,6 +41,7 @@ model Destination {
   travelTips         String[] @default([])
   trips              Trip[]
   favoritedBy        User[]   @relation("UserFavorites")
+  hotels   Hotel[] 
 }
 
 model Trip {
@@ -101,6 +102,10 @@ model Hotel {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   trips          Trip[]
+  destinationId  String ?
+  destination  Destination? @relation(fields : [destinationId], references: [id], onDelete: Cascade)
+
+  @@index([destinationId])
 }
 
 enum Role {

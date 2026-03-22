@@ -8,7 +8,7 @@ const SuppComponent = () => {
     const navigate = useNavigate();
     return(
 
-        <div className=" bg-white shadow-2xl flex flex-col w-[800px] rounded-[10px] mb-10 max-[850px]:w-[700px] max-[750px]:w-[320px]">
+        <div className=" bg-white shadow-2xl flex transition-transform duration-200 hover:scale-105 flex-col w-[800px] rounded-[10px] mb-10 max-[850px]:w-[700px] max-[750px]:w-[320px]">
 
             <h1 className="text-[1.3em] font-bold p-5 border-b border-b-gray-300 ">Planifiez votre prochain voyage facilement </h1>
 
@@ -21,7 +21,7 @@ const SuppComponent = () => {
 
          <img
          className="w-[300px] max-[750px]:w-[250px]"
-         src="https://res.cloudinary.com/dub4fhabm/image/upload/v1774046404/70e3455f-5b8f-4bb6-ba71-e8c8698bb653.png" alt="" />
+         src="https://res.cloudinary.com/dub4fhabm/image/upload/v1774085293/undraw_travel-booking_a6s2_iwvmjt.svg" alt="" />
 
             </div>
 

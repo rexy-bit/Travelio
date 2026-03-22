@@ -3,6 +3,8 @@ import { motion } from "framer-motion"
 import { useDestinationsContext } from "../Contexts/DestinationsContext";
 import DestinationCard from "../Components/DestinationsComponents/DestinationCard";
 import SearchDestinationsComponent from "../Components/DestinationsComponents/SearchDestinationsComponent";
+import TipsBlock from "../Components/TripsComponents/TipsBlock";
+import { tipsData } from "../tipsData";
 
 const containerVariants = {
   hidden: {},
@@ -85,6 +87,8 @@ const Destinations = () => {
           </motion.div>
         ))}
       </motion.div>
+
+      <TipsBlock data={tipsData.destinations}/>  
 
     </section>
   );

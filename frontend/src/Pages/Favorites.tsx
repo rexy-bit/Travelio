@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion"
 import DestinationCard from "../Components/DestinationsComponents/DestinationCard";
 
+
 const Favorites = () => {
 
     const {user} = useAuthContext();
@@ -78,6 +79,8 @@ const cardVariants = {
       </motion.div>
                     </>
             }
+
+            
              
         </section>
     )

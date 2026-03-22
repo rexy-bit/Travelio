@@ -103,3 +103,14 @@ export interface FilterTripType{
     maxPrice : number;
 
 }
+
+export type Tip = {
+  icon: string; // ou plus précis après
+  text: string;
+};
+
+export type TipsBlockData = {
+  title: string;
+  description: string;
+  tips: Tip[];
+};

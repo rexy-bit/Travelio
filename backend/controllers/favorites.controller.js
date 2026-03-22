@@ -1,5 +1,5 @@
 
-import { success } from "zod";
+
 import prisma from "../config/prisma.js"
 
 export const toggleFavorite = async (req, res, next) => {

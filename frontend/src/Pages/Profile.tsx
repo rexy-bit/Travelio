@@ -8,6 +8,9 @@ import UserStats from "../Components/AuthComponents/UserStats";
 
  import { motion } from "framer-motion";
 import SuppComponent from "../Components/AuthComponents/SuppComponent";
+import TripDetails from "./TripDetails";
+import TipsBlock from "../Components/TripsComponents/TipsBlock";
+import { tipsData } from "../tipsData";
 
 
 const Profile = () => {
@@ -98,7 +101,10 @@ const item = {
 
     </motion.div>
 
+   <div className="flex flex-col items-center">
      <SuppComponent/>
+     <TipsBlock data={tipsData.profile}/>  
+     </div>
 
   </motion.section>
 </>

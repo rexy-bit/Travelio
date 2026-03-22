@@ -3,6 +3,9 @@ import { useReservationsContext } from "../Contexts/ReservationsContext";
 import { useAuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ReservationCard from "../Components/ReservationComponents.tsx/ReservationCard";
+import TipsBlock from "../Components/TripsComponents/TipsBlock";
+import { tipsData } from "../tipsData";
+
 
 
 const Reservations = () => {
@@ -112,6 +115,8 @@ const Reservations = () => {
                      </div>
                  </div>
               }
+
+             <TipsBlock data={tipsData.reservations}/>
         </section>
     )
 }

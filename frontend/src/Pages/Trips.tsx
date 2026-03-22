@@ -3,6 +3,8 @@ import { useTripsContext } from "../Contexts/TripsContext";
 import TripCard from "../Components/TripsComponents/TripCard";
 import FilterTripsComponent from "../Components/TripsComponents/FilterTripsComponent";
 import { motion, AnimatePresence } from "framer-motion";
+import TipsBlock from "../Components/TripsComponents/TipsBlock";
+import { tipsData } from "../tipsData";
 
 const containerVariants = {
   hidden: {},
@@ -140,6 +142,7 @@ const Trips = () => {
             )}
           </AnimatePresence>
         </div>
+        <TipsBlock data={tipsData.trips}/>
 
         {/* Trips grid */}
         <AnimatePresence mode="popLayout">
@@ -149,7 +152,7 @@ const Trips = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col justify-center items-center gap-2 mt-15"
+              className="flex flex-col justify-center items-center gap-2 mt-5"
             >
               <i className="fa-solid fa-plane fa-spin text-[1.3em]"></i>
               <p className="text-[16px] font-[500]">Chargement des Voyages</p>
@@ -160,7 +163,7 @@ const Trips = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="text-[19px] font-[500] mt-15"
+              className="text-[19px] font-[500] mt-5"
             >
               Aucun voyage trouvé
             </motion.div>
@@ -170,17 +173,23 @@ const Trips = () => {
   variants={containerVariants}
   initial="hidden"
   animate="show"
-  className="flex flex-wrap justify-center items-center mt-15 gap-10 mb-15"
+  className="flex flex-wrap justify-center items-center mt-5 gap-10 mb-15"
 >
+
   <AnimatePresence mode="popLayout">
+    
     {trips.map((t) => (
       <TripCard key={t.id} trip={t} />
     ))}
   </AnimatePresence>
 </motion.div>
           )}
+
+          
         </AnimatePresence>
       </div>
+
+      
     </section>
   );
 };
