@@ -1,13 +1,17 @@
 import { memo } from "react";
 import { Outlet } from "react-router-dom"
+import AdminHeader from "../AdminComponents/BaseComponents/AdminHeader";
 
 
 const AdminLayout = () => {
 
     return(
-        <main>
+        <>
+        <AdminHeader/>
+        <main className="w-full">
             <Outlet/>
         </main>
+        </>
     )
 }
 

@@ -22,6 +22,9 @@ import UserRoute from './Layouts/UserRoute'
 import PublicLayout from './Layouts/PublicLayout'
 import AdminRoute from './Layouts/AdminRoute'
 import AdminLayout from './Layouts/AdminLayout'
+import Dashboard from './AdminPages/Dashboard'
+import DestinationsAdmin from './AdminPages/DestinationsAdmin'
+import DestinationAdminDetails from './AdminPages/DestinationAdminDetails'
 
 function App() {
   
@@ -125,13 +128,25 @@ function App() {
        </Route>
 
 
-       <Route path='/dashboard/*' element={
+       <Route path='/admin/*' element={
         <AdminRoute>
           <AdminLayout/>
         </AdminRoute>
        }>
       
-       </Route>
+       <Route path='dashboard' element={
+        <Dashboard/>
+       }/>
+ 
+       <Route path='destinations' element={
+        <DestinationsAdmin/>
+       }/>
+
+       <Route path='destinationDetail/:id' element={
+        <DestinationAdminDetails/>
+       }/>
+   
+     </Route>
 
     </Routes>
 

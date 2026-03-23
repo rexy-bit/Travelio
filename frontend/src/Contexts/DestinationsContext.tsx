@@ -18,6 +18,7 @@ interface DestinationsContextType{
     loadingSearchDestinations : boolean;
     searchDestinationsInput : string;
     setSearchDestinationsInput : (s : string)=>void;
+    setDestinationDetail : (d : Destination | null)=>void;
 }
 
 const DestinationsContext = createContext<DestinationsContextType | null>(null);
@@ -169,7 +170,9 @@ export const DestinationsProvider = ({children} : {children : React.ReactNode}) 
     return(
         <DestinationsContext.Provider value={{destinations, loadingDestinations, getDestinations, 
         getDestination, destinationDetail, loadingDestination, uniqueCities, uniqueCountries
-        ,searchDestinationsResult, loadingSearchDestinations,searchDestinationsInput,setSearchDestinationsInput
+        ,searchDestinationsResult, loadingSearchDestinations,searchDestinationsInput,
+        setSearchDestinationsInput,
+        setDestinationDetail
         }}>
             {children}
         </DestinationsContext.Provider>
