@@ -1,6 +1,6 @@
 import { date, success } from "zod";
 import prisma from "../config/prisma.js"
-
+import { cloudinary } from "../config/env.js";
 
 export const getDestinations = async(req , res , next) => {
 
@@ -183,4 +183,170 @@ export const searchDestination = async(req, res, next) => {
     }catch(err){
         next(err);
     }
+}
+
+
+
+export const updateDestination = async(req, res, next) =>  {
+
+    try{
+
+        const destinationId = req.params.id;
+
+        const destination = await prisma.destination.findUnique({
+            where : {
+                id : destinationId
+            }
+        });
+
+        if(!destination){
+            return res.status(404).json({
+                success : false,
+                message : "Error destination not found"
+            });
+        }
+
+        const {city,
+country,
+continent,
+        description,
+        language,
+        timeZone,
+        bestSeason,
+       averageTemperature,
+       longitude,
+        rating,
+         attractions,
+         travelTips} = req.body;
+
+
+    
+
+    const updates = {};
+
+    if(!city || !country || !continent || !description ||!language || city.trim() === '' || country.trim() === ""
+     || continent.trim() === "" || description.trim() === "" || language.trim() === ''){
+        return res.status(400).json({
+            success : false,
+            message : "Please enter valid city or country or continent or description or language"
+        });
+     }
+
+     updates.city = city;
+     updates.continent = continent;
+     updates.country = country;
+     updates.description = description;
+     updates.language = language;
+
+        if(!bestSeason || bestSeason === ''){
+           return res.status(400).json({
+            success : false,
+            message :"Please enter valid bestSeason data"
+           });
+        }
+
+        updates.bestSeason = bestSeason;
+
+        if(!timeZone || timeZone === ""        ){
+            return res.status(400).json({
+                success : false,
+                message : "Error Invalid timeZone"
+            });
+        }
+        updates.timeZone = timeZone;
+
+        if(averageTemperature === undefined){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid averageTemperature"
+            });
+        }
+        updates.averageTemperature = Number(averageTemperature);
+
+        if(!longitude){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid longtitude"
+            });
+        }
+        updates.longitude = Number(longitude);
+
+         if(!rating || Number(rating) < 0){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid rating"
+            });
+        }
+        updates.rating = Number(rating);
+
+updates.attractions = req.body.attractions
+  ? JSON.parse(req.body.attractions)
+  : [];
+
+updates.travelTips = req.body.travelTips
+  ? JSON.parse(req.body.travelTips)
+  : [];
+        
+         let finalImages = [];
+      
+      // Anciennes images si envoyées depuis le front
+      if (req.body.oldImages) {
+        try {
+          finalImages = JSON.parse(req.body.oldImages);
+        } catch (e) {
+          console.error("oldImages parsing error:", e);
+        }
+      }
+      
+                      // Nouvelles images uploadées
+                      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+                      const uploadPromises = req.files.map((file) => {
+                          return new Promise((resolve, reject) => {
+                          const stream = cloudinary.uploader.upload_stream(
+                              { folder: "Travelio" },
+                              (error, result) => {
+                              if (error) reject(error);
+                              else resolve(result.secure_url);
+                              }
+                          );
+                          stream.end(file.buffer);
+                          });
+                      });
+      
+                      const results = await Promise.all(uploadPromises);
+                      finalImages = [...finalImages, ...results]; // ✅ concat anciennes + nouvelles
+                      }
+      
+                      if(finalImages.length > 0){
+                          updates.images = finalImages;
+      
+                      }
+        
+
+            const updatedDestination = await prisma.destination.update({
+                where: {
+                    id : destinationId
+                },
+                data : updates
+            });
+
+            if(!updatedDestination){
+                return res.status(404).json({
+                    success: false,
+                    message : "Error in updating the destination"
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message : "destination updated successfully",
+                data: updatedDestination
+            });
+        
+        }catch(err){
+            next(err);
+        }
+
+     
+
 }

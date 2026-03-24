@@ -1,8 +1,26 @@
 import { Router } from "express";
-import { getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination} from "../controllers/destination.controller.js";
-
+import { getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination, updateDestination} from "../controllers/destination.controller.js";
+import authorize from "../middlewares/auth.middleware.js";
+import isAdmin from "../middlewares/admin.middleware.js";
+import multer from "multer";
 
 const destinationRouter = Router();
+
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/avif"];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type. Only JPEG, PNG, AVIF, and WEBP are allowed."));
+    }
+  },
+});
 
 destinationRouter.get('/', getDestinations);
 
@@ -13,9 +31,11 @@ destinationRouter.get('/:id', getDestination);
 
 destinationRouter.post('/add', (req, res)=>res.send("Add destination"));
 
-destinationRouter.put('/update', (req, res)=>res.send("Update destination"));
+destinationRouter.put('/update/:id', authorize, isAdmin,upload.array("images"), updateDestination);
 
 destinationRouter.delete('/delete/:id', (req, res)=>res.send("Delete destination"));
+
+
 
 
 export default destinationRouter;

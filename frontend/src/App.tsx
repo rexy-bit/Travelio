@@ -25,6 +25,7 @@ import AdminLayout from './Layouts/AdminLayout'
 import Dashboard from './AdminPages/Dashboard'
 import DestinationsAdmin from './AdminPages/DestinationsAdmin'
 import DestinationAdminDetails from './AdminPages/DestinationAdminDetails'
+import { DestinationAdminProvider } from './AdminContexts/DestinationAdminContext'
 
 function App() {
   
@@ -36,6 +37,7 @@ function App() {
           <ReservationsProvider>
             <FavoritesProvider>
               <UsersProvider>
+                <DestinationAdminProvider>
     <Routes>
 
       <Route element={
@@ -145,11 +147,17 @@ function App() {
        <Route path='destinationDetail/:id' element={
         <DestinationAdminDetails/>
        }/>
+
+    
    
      </Route>
 
+
+
     </Routes>
 
+
+                </DestinationAdminProvider>
             </UsersProvider>
         </FavoritesProvider>
     </ReservationsProvider>
