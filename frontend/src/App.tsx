@@ -26,6 +26,7 @@ import Dashboard from './AdminPages/Dashboard'
 import DestinationsAdmin from './AdminPages/DestinationsAdmin'
 import DestinationAdminDetails from './AdminPages/DestinationAdminDetails'
 import { DestinationAdminProvider } from './AdminContexts/DestinationAdminContext'
+import AddDestination from './AdminPages/AddDestination'
 
 function App() {
   
@@ -148,7 +149,9 @@ function App() {
         <DestinationAdminDetails/>
        }/>
 
-    
+        <Route path='addDestination' element={
+          <AddDestination/>
+        }/>
    
      </Route>
 

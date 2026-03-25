@@ -25,7 +25,7 @@ const AdminHeader = () => {
 
     return(
         <>
-        <header className="w-full flex flex-row items-center px-5 h-[60px] w-full bg-[#1B4332] text-white">
+        <header className="w-full flex flex-row items-center px-5 h-[60px] w-full bg-[#1B4332] text-white fixed top-0 z-50">
             
             <div className="flex flex-row gap-7 items-center">
                <div 
@@ -52,7 +52,7 @@ const AdminHeader = () => {
       exit={{ x: -250, opacity: 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
            
-           className="flex flex-col  h-[calc(100%-60px)]  bg-white shadow-2xl z-50 fixed left-0 w-[250px]">
+           className="flex flex-col  h-[calc(100%-60px)]  bg-white shadow-2xl z-50 fixed left-0 w-[250px] mt-[60px]">
  
               <div className="flex flex-col gap-2 p-3 border-b border-b-gray-300">
                 

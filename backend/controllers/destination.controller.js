@@ -1,4 +1,3 @@
-import { date, success } from "zod";
 import prisma from "../config/prisma.js"
 import { cloudinary } from "../config/env.js";
 
@@ -216,7 +215,10 @@ continent,
        averageTemperature,
        longitude,
         rating,
+        latitude,
+        currency,
          attractions,
+         activities,
          travelTips} = req.body;
 
 
@@ -225,7 +227,7 @@ continent,
     const updates = {};
 
     if(!city || !country || !continent || !description ||!language || city.trim() === '' || country.trim() === ""
-     || continent.trim() === "" || description.trim() === "" || language.trim() === ''){
+     || continent.trim() === "" || description.trim() === "" || language.trim() === '' || !currency || currency.trim() === ""){
         return res.status(400).json({
             success : false,
             message : "Please enter valid city or country or continent or description or language"
@@ -237,6 +239,7 @@ continent,
      updates.country = country;
      updates.description = description;
      updates.language = language;
+     updates.currency = currency;
 
         if(!bestSeason || bestSeason === ''){
            return res.status(400).json({
@@ -246,6 +249,15 @@ continent,
         }
 
         updates.bestSeason = bestSeason;
+
+        if (latitude === undefined || isNaN(Number(latitude))) {
+    return res.status(400).json({
+        success: false,
+        message: "Error invalid latitude"
+    });
+}
+
+updates.latitude = Number(latitude);
 
         if(!timeZone || timeZone === ""        ){
             return res.status(400).json({
@@ -263,7 +275,7 @@ continent,
         }
         updates.averageTemperature = Number(averageTemperature);
 
-        if(!longitude){
+        if(longitude === undefined || isNaN(Number(longitude))){
             return res.status(400).json({
                 success : false,
                 message : "Error invalid longtitude"
@@ -271,7 +283,7 @@ continent,
         }
         updates.longitude = Number(longitude);
 
-         if(!rating || Number(rating) < 0){
+         if(rating === undefined || isNaN(Number(rating)) || Number(rating) < 0){
             return res.status(400).json({
                 success : false,
                 message : "Error invalid rating"
@@ -279,14 +291,23 @@ continent,
         }
         updates.rating = Number(rating);
 
-updates.attractions = req.body.attractions
-  ? JSON.parse(req.body.attractions)
-  : [];
+updates.attractions = Array.isArray(attractions)
+  ? attractions
+  : attractions
+    ? JSON.parse(attractions)
+    : [];
 
-updates.travelTips = req.body.travelTips
-  ? JSON.parse(req.body.travelTips)
-  : [];
+    updates.travelTips = Array.isArray(travelTips)
+  ? travelTips
+  : travelTips
+    ? JSON.parse(travelTips)
+    : [];
         
+     updates.activities = Array.isArray(activities)
+  ? activities
+  : activities
+    ? JSON.parse(activities)
+    : [];
          let finalImages = [];
       
       // Anciennes images si envoyées depuis le front
@@ -349,4 +370,163 @@ updates.travelTips = req.body.travelTips
 
      
 
+}
+
+
+export const addDestination = async(req, res, next) => {
+
+    try{
+
+      const {city,
+country,
+continent,
+        description,
+        language,
+        timeZone,
+        bestSeason,
+       averageTemperature,
+       longitude,
+        rating,
+        currency,
+        latitude,
+        activities,
+         attractions,
+         travelTips} = req.body;
+
+         const addedDestination ={};
+
+
+          if(!city || !country || !continent || !description ||!language || city.trim() === '' || country.trim() === ""
+     || continent.trim() === "" || description.trim() === "" || language.trim() === '' || !currency || currency.trim() === ""){
+        return res.status(400).json({
+            success : false,
+            message : "Please enter valid city or country or continent or description or language"
+        });
+     }
+
+     addedDestination.city = city;
+     addedDestination.continent = continent;
+     addedDestination.country = country;
+     addedDestination.description = description;
+     addedDestination.language = language;
+     addedDestination.currency = currency;
+
+        if(!bestSeason || bestSeason === ''){
+           return res.status(400).json({
+            success : false,
+            message :"Please enter valid bestSeason data"
+           });
+        }
+
+        addedDestination.bestSeason = bestSeason;
+
+        if(!timeZone || timeZone === ""        ){
+            return res.status(400).json({
+                success : false,
+                message : "Error Invalid timeZone"
+            });
+        }
+        addedDestination.timeZone = timeZone;
+
+        if(averageTemperature === undefined){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid averageTemperature"
+            });
+        }
+        addedDestination.averageTemperature = Number(averageTemperature);
+
+        if (latitude === undefined || isNaN(Number(latitude))) {
+    return res.status(400).json({
+        success: false,
+        message: "Error invalid latitude"
+    });
+}
+
+addedDestination.latitude = Number(latitude);
+
+        if(longitude === undefined || isNaN(Number(longitude))){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid longtitude"
+            });
+        }
+        addedDestination.longitude = Number(longitude);
+
+         if(rating === undefined || isNaN(Number(rating)) || Number(rating) < 0){
+            return res.status(400).json({
+                success : false,
+                message : "Error invalid rating"
+            });
+        }
+        addedDestination.rating = Number(rating);
+
+addedDestination.attractions = Array.isArray(attractions)
+  ? attractions
+  : attractions
+    ? JSON.parse(attractions)
+    : [];
+
+    addedDestination.travelTips = Array.isArray(travelTips)
+  ? travelTips
+  : travelTips
+    ? JSON.parse(travelTips)
+    : [];
+
+    addedDestination.activities = Array.isArray(activities)
+  ? activities
+  : activities
+    ? JSON.parse(activities)
+    : [];
+
+        
+         let finalImages = [];
+      
+      // Anciennes images si envoyées depuis le front
+      if (req.body.oldImages) {
+        try {
+          finalImages = JSON.parse(req.body.oldImages);
+        } catch (e) {
+          console.error("oldImages parsing error:", e);
+        }
+      }
+      
+                      // Nouvelles images uploadées
+                      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+                      const uploadPromises = req.files.map((file) => {
+                          return new Promise((resolve, reject) => {
+                          const stream = cloudinary.uploader.upload_stream(
+                              { folder: "Travelio" },
+                              (error, result) => {
+                              if (error) reject(error);
+                              else resolve(result.secure_url);
+                              }
+                          );
+                          stream.end(file.buffer);
+                          });
+                      });
+      
+                      const results = await Promise.all(uploadPromises);
+                      finalImages = [...finalImages, ...results]; // ✅ concat anciennes + nouvelles
+                      }
+      
+                      if(finalImages.length > 0){
+                          addedDestination.images = finalImages;
+      
+                      }
+
+        const newDestination = await prisma.destination.create({
+            data : addedDestination
+        });
+
+ 
+
+        return res.status(201).json({
+            success : true,
+            message : "Destination created successfully",
+            data : newDestination
+        });
+    }catch(err){
+        next(err);
+    }
 }

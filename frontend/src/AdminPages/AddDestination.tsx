@@ -1,27 +1,56 @@
-import { memo, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDestinationsContext } from "../Contexts/DestinationsContext";
+import { memo, useEffect, useState } from "react"
+
 import Icon from "../Icons/Icon";
+import type { Destination } from "../Contexts/Types";
 import { useDestinationAdminContext } from "../AdminContexts/DestinationAdminContext";
-import { activeAnimations } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 
-const DestinationAdminDetails = () => {
 
-    const { id } = useParams();
+
+const AddDestination = () => {
+
+    
+
     const navigate = useNavigate();
+    const [destination, setDestination] = useState<Destination>(() => {
+    const saved = localStorage.getItem('destination');
+    return saved ? JSON.parse(saved) : {
+        id: "",
+        city: "",
+        country: "",
+        continent: "Europe",   // ← was ""
+        latitude: 0,
+        longitude: 0,
+        description: "",
+        bestSeason: "",
+        currency: "",
+        language: "",
+        timeZone: "UTC",       // ← was "" (fix this too)
+        attractions: [],
+        activities: [],
+        travelTips: [],
+        rating: 0,
+        averageTemperature: 0,
+        images: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
+});
 
-    const { getDestination, destinationDetail, loadingDestination, setDestinationDetail } = useDestinationsContext();
-    const {updateDestination, loadingUpdateDestination} = useDestinationAdminContext();
 
-    useEffect(() => {
-        getDestination(id);
-    }, []);
+useEffect(()=>{
+    localStorage.setItem('destination', JSON.stringify(destination));
 
-    const [imagesFile, setImagesFile] = useState<File[]>([]);
+}, [destination]);
+
+         const [imagesFile, setImagesFile] = useState<File[]>([]);
     const [newAttraction, setNewAttraction] = useState<string>("");
     const [newTip, setNewTip] = useState<string>("");
-    const [newActivity, setNewActivity] = useState<string>("");
+
+    const {addDestination, loadingAddDestination} = useDestinationAdminContext();
+
+        const [newActivity, setNewActivity] = useState<string>("");
 
     const addActivity = () => {
 
@@ -29,19 +58,19 @@ const DestinationAdminDetails = () => {
             return;
         }
 
-        setDestinationDetail({
-            ...destinationDetail!,
-            activities : [...destinationDetail!.activities, newActivity]
+        setDestination({
+            ...destination!,
+            activities : [...destination!.activities, newActivity]
         });
-
         setNewActivity("");
+
     }
 
     const removeActivity = (index : number) => {
  
-        setDestinationDetail({
-            ...destinationDetail!,
-            activities : destinationDetail!.activities.filter((_,i)=>i !== index)
+        setDestination({
+            ...destination!,
+            activities : destination!.activities.filter((_,i)=>i !== index)
         })
         
     }
@@ -50,8 +79,8 @@ const DestinationAdminDetails = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
 
-        setDestinationDetail({
-            ...destinationDetail!,
+        setDestination({
+            ...destination!,
             [name]: type === "number" ? Number(value) : value
         });
     };
@@ -60,18 +89,18 @@ const DestinationAdminDetails = () => {
     const addAttraction = () => {
         if (!newAttraction || newAttraction === "") return;
 
-        setDestinationDetail({
-            ...destinationDetail!,
-            attractions: [...destinationDetail!.attractions, newAttraction]
+        setDestination({
+            ...destination!,
+            attractions: [...destination!.attractions, newAttraction]
         });
 
         setNewAttraction("");
     };
 
     const removeAttraction = (index: number) => {
-        setDestinationDetail({
-            ...destinationDetail!,
-            attractions: destinationDetail!.attractions.filter((_, i) => i !== index)
+        setDestination({
+            ...destination!,
+            attractions: destination!.attractions.filter((_, i) => i !== index)
         });
     };
 
@@ -79,18 +108,18 @@ const DestinationAdminDetails = () => {
     const addNewTip = () => {
         if (!newTip || newTip === "") return;
 
-        setDestinationDetail({
-            ...destinationDetail!,
-            travelTips: [...destinationDetail!.travelTips, newTip]
+        setDestination({
+            ...destination!,
+            travelTips: [...destination!.travelTips, newTip]
         });
 
         setNewTip("");
     };
 
     const removeTip = (index: number) => {
-        setDestinationDetail({
-            ...destinationDetail!,
-            travelTips: destinationDetail!.travelTips.filter((_, i) => i !== index)
+        setDestination({
+            ...destination!,
+            travelTips: destination!.travelTips.filter((_, i) => i !== index)
         });
     };
 
@@ -100,90 +129,93 @@ const DestinationAdminDetails = () => {
         console.log("submit function called");
 
         if (
-            !destinationDetail?.city ||
-            !destinationDetail.country ||
-            !destinationDetail.continent ||
-            !destinationDetail.description ||
-            !destinationDetail.language ||
-            !destinationDetail.timeZone ||
-            !destinationDetail.bestSeason ||
-            destinationDetail.averageTemperature === undefined ||
-            destinationDetail.longitude === undefined ||
-            destinationDetail.rating === undefined
+            !destination?.city ||
+            !destination.country ||
+            !destination.continent ||
+            !destination.description ||
+            !destination.language ||
+            !destination.timeZone ||
+            !destination.bestSeason ||
+            destination.averageTemperature === undefined ||
+            destination.longitude === undefined ||
+            destination.rating === undefined
         ) {
              console.log("Validation échouée");
+             console.log({
+    city: destination.city,
+    country: destination.country,
+    continent: destination.continent,
+    description: destination.description,
+    language: destination.language,
+    timeZone: destination.timeZone,
+    bestSeason: destination.bestSeason,
+    averageTemperature: destination.averageTemperature,
+    longitude: destination.longitude,
+    rating: destination.rating,
+});
             return;}
 
         const formData = new FormData();
 
-        formData.append("city", destinationDetail.city);
-        formData.append("country", destinationDetail.country);
-        formData.append("continent", destinationDetail.continent);
-        formData.append("description", destinationDetail.description);
-        formData.append("language", destinationDetail.language);
-        formData.append("timeZone", destinationDetail.timeZone);
-        formData.append("bestSeason", destinationDetail.bestSeason);
-        formData.append("currency", destinationDetail.currency);
-        formData.append("averageTemperature", String(destinationDetail.averageTemperature));
-        formData.append("longitude", String(destinationDetail.longitude));
-        formData.append("rating", String(destinationDetail.rating));
-        formData.append("latitude", String(destinationDetail.latitude));
-        formData.append("attractions", JSON.stringify(destinationDetail.attractions));
-        formData.append("travelTips", JSON.stringify(destinationDetail.travelTips));
-        formData.append("activities", JSON.stringify(destinationDetail.activities));
+        formData.append("city", destination.city);
+        formData.append("country", destination.country);
+        formData.append("continent", destination.continent);
+        formData.append("description", destination.description);
+        formData.append("language", destination.language);
+        formData.append("timeZone", destination.timeZone);
+        formData.append("bestSeason", destination.bestSeason);
+        formData.append("currency", destination.currency);
+        formData.append("averageTemperature", String(destination.averageTemperature));
+        formData.append("longitude", String(destination.longitude));
+        formData.append("rating", String(destination.rating));
+        formData.append("latitude", String(destination.latitude));
+        formData.append("attractions", JSON.stringify(destination.attractions));
+        formData.append("travelTips", JSON.stringify(destination.travelTips));
+        formData.append("activities", JSON.stringify(destination.activities));
 
         // Images existantes conservées
-        formData.append("oldImages", JSON.stringify(destinationDetail.images));
+        formData.append("oldImages", JSON.stringify(destination.images));
 
         // Nouvelles images uploadées
         imagesFile.forEach((file) => {
             formData.append("images", file);
         });
-
-        await updateDestination(destinationDetail.id, formData);
+ 
+        await addDestination(formData);
+        
     };
 
-    return (
+
+    return(
+
         <>
-            <header className="flex z-20 flex-row w-full h-[50px] justify-between px-5 items-center shadow-2xl bg-white fixed top-[60px]">
+        
+             <header className="flex z-20 flex-row w-full h-[50px] justify-between px-5 items-center shadow-2xl bg-white fixed top-[60px]">
                 <div className="flex flex-row items-center gap-2 font-bold text-[1.3em] max-[800px]:text-[0.9em] text-[#1B4332]">
-                    <Icon name="MapPin" size={27} />
-                    <div className="max-[800px]:w-[150px]">
-                        {destinationDetail?.city} - {destinationDetail?.country}
-                    </div>
+                    <Icon name="Plus" size={27} />
+                     <div>
+                        Ajout d'une destination
+                     </div>
                 </div>
 
                 <div className="flex flex-row items-center gap-3">
                    
 
-                    <button
-                        onClick={()=>navigate(`/admin/addDestination`)}
-                        type="button"
-                        className="w-[140px] text-[14px] font-sans bg-yellow-600 text-white font-semibold py-1 rounded-[5px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60"
-                    >
-                        + Add Destination
-                    </button>
+                   
                 </div>
             </header>
 
+
             <section className="flex flex-col items-center bg-gray-200 min-h-screen w-full">
 
-                {loadingDestination
-                    ?
-                    <p className="mt-15">Chargement de la destination...</p>
-                    :
-                    !destinationDetail ?
-                        <p>Destination non trouvée</p>
-                        :
+            
                         <div className="flex flex-col items-center w-full pb-20">
+                              
+                              <div className="mt-40 text-[1.5em] font-bold">
+                                Ajout d'une destination
+                              </div>
 
-                            <div className="text-[1.3em] font-[600] mt-40 flex flex-col justify-center items-center px-3 text-center">
-                                Details/Modification de la destination:
-                                <div>{destinationDetail.city} - {destinationDetail.country}</div>
-                            </div>
-
-                            {/* ── Informations de base ── */}
-                            <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
+                                                          <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
                                 <h1 className="text-[1.3em] font-bold underline">Informations de base</h1>
 
                                 <div className="mt-8 flex flex-col gap-1 w-full">
@@ -192,7 +224,7 @@ const DestinationAdminDetails = () => {
                                         type="text"
                                         name="city"
                                         placeholder="Ville"
-                                        value={destinationDetail.city}
+                                        value={destination.city}
                                         onChange={handleChange}
                                         
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
@@ -205,7 +237,7 @@ const DestinationAdminDetails = () => {
                                         type="text"
                                         name="country"
                                         
-                                        value={destinationDetail.country}
+                                        value={destination.country}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -216,7 +248,7 @@ const DestinationAdminDetails = () => {
                                     <select
                                         name="continent"
                                     
-                                        value={destinationDetail.continent}
+                                        value={destination.continent}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     >
@@ -234,13 +266,14 @@ const DestinationAdminDetails = () => {
                                         name="description"
                                         
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px] h-[200px]"
-                                        value={destinationDetail.description}
+                                        value={destination.description}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </div>
 
-                            {/* ── Informations pratiques ── */}
+
+                               {/* ── Informations pratiques ── */}
                             <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
                                 <h1 className="text-[1.3em] font-bold underline">Informations Pratiques</h1>
 
@@ -251,7 +284,7 @@ const DestinationAdminDetails = () => {
                                         name="language"
                                         placeholder="Langue"
                                         
-                                        value={destinationDetail.language}
+                                        value={destination.language}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -261,7 +294,7 @@ const DestinationAdminDetails = () => {
                                     <p className="font-semibold">Fuseau Horaire:</p>
                                     <select
                                         name="timeZone"
-                                        value={destinationDetail.timeZone}
+                                        value={destination.timeZone}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     >
@@ -313,7 +346,7 @@ const DestinationAdminDetails = () => {
                                         
                                         name="bestSeason"
                                         placeholder="Meilleure saison"
-                                        value={destinationDetail.bestSeason}
+                                        value={destination.bestSeason}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -326,7 +359,7 @@ const DestinationAdminDetails = () => {
                                         name="averageTemperature"
                                         
                                         placeholder="°C"
-                                        value={destinationDetail.averageTemperature}
+                                        value={destination.averageTemperature}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -339,7 +372,7 @@ const DestinationAdminDetails = () => {
                                         name="longitude"
                                         step={0.1}
                                         placeholder="Longitude"
-                                        value={destinationDetail.longitude}
+                                        value={destination.longitude}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -353,21 +386,20 @@ const DestinationAdminDetails = () => {
                                         name="currency"
                                         
                                         placeholder="Currency"
-                                        value={destinationDetail.currency}
+                                        value={destination.currency}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
                                 </div>
 
-
-                                  <div className="mt-5 flex flex-col gap-1 w-full">
+                                <div className="mt-5 flex flex-col gap-1 w-full">
                                     <p className="font-semibold">Latitude:</p>
                                     <input
                                         type="number"
                                         name="latitude"
                                         
-                                        placeholder="Longitude"
-                                        value={destinationDetail.latitude}
+                                        placeholder="Latitude"
+                                        value={destination.latitude}
                                         onChange={handleChange}
                                         className="bg-gray-100 p-2 border border-gray-300 rounded-[5px]"
                                     />
@@ -379,7 +411,7 @@ const DestinationAdminDetails = () => {
                                         type="number"
                                         name="rating"
                                         placeholder="Note moyenne"
-                                        value={destinationDetail.rating}
+                                        value={destination.rating}
                                         min={0}
                                         
                                         max={5}
@@ -389,13 +421,16 @@ const DestinationAdminDetails = () => {
                                 </div>
                             </div>
 
-                            {/* ── Attractions ── */}
+
+
+
+                              {/* ── Attractions ── */}
                             <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
                                 <h1 className="text-[1.3em] font-bold underline">Attractions:</h1>
 
                                 <ul className="mt-5 flex flex-col gap-7">
-                                    {destinationDetail.attractions.map((a, i) => (
-                                        <div key={i} className="flex flex-row justify-center items-center gap-10">
+                                    {destination.attractions.map((a, i) => (
+                                        <div key={i} className="flex flex-row justify-center items-center gap-10 border-t pt-2 border-gray-300">
                                             <p className="w-[500px]">{a}</p>
                                             <button
                                                 type="button"
@@ -427,13 +462,14 @@ const DestinationAdminDetails = () => {
                                 </div>
                             </div>
 
-                            {/* ── Conseils de voyage ── */}
+
+                             {/* ── Conseils de voyage ── */}
                             <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
                                 <h1 className="text-[1.3em] font-bold underline">Conseils de voyage:</h1>
 
                                 <ul className="mt-5 flex flex-col gap-7">
-                                    {destinationDetail.travelTips.map((a, i) => (
-                                        <div key={i} className="flex flex-row justify-center items-center gap-10">
+                                    {destination.travelTips.map((a, i) => (
+                                        <div key={i} className="flex flex-row justify-center items-center gap-10 border-t pt-2 border-gray-300">
                                             <p className="w-[500px]">{a}</p>
                                             <button
                                                 type="button"
@@ -465,12 +501,13 @@ const DestinationAdminDetails = () => {
                                 </div>
                             </div>
 
-                               {/* ── Activities ── */}
+
+                                                           {/* ── Activities ── */}
                             <div className="flex flex-col w-[700px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl max-[800px]:w-[500px] max-[550px]:w-[320px]">
                                 <h1 className="text-[1.3em] font-bold underline">Activités intéressantes:</h1>
 
                                 <ul className="mt-5 flex flex-col gap-7">
-                                    {destinationDetail.activities.map((a, i) => (
+                                    {destination.activities.map((a, i) => (
                                         <div key={i} className="flex flex-row justify-center items-center gap-10">
                                             <p className="w-[500px]">{a}</p>
                                             <button
@@ -502,22 +539,24 @@ const DestinationAdminDetails = () => {
                                     </button>
                                 </div>
                             </div>
-                            {/* ── Images ── */}
+
+
+                             {/* ── Images ── */}
                             <div className="flex flex-col w-[700px] max-[800px]:w-[500px] max-[550px]:w-[320px] bg-white p-5 rounded-[10px] mt-10 shadow-2xl">
                                 <h1 className="text-[1.3em] font-bold underline">Images:</h1>
 
                                 {/* Images existantes */}
                                 <div className="flex flex-wrap gap-5 justify-center items-center mt-5">
-                                    {destinationDetail.images.map((image, i) => (
+                                    {destination.images.map((image, i) => (
                                         <div key={i} className="relative w-[150px]">
                                             <img src={image} alt="" className="w-[150px] h-[150px] object-cover rounded-[5px]" />
                                             <button
                                                 type="button"
                                                 className="absolute top-[-10px] right-[-10px] w-[20px] h-[20px] flex justify-center items-center rounded-full bg-red-600 text-white cursor-pointer"
                                                 onClick={() => {
-                                                    setDestinationDetail({
-                                                        ...destinationDetail,
-                                                        images: destinationDetail.images.filter((_, idx) => idx !== i)
+                                                    setDestination({
+                                                        ...destination,
+                                                        images: destination.images.filter((_, idx) => idx !== i)
                                                     });
                                                 }}
                                             >
@@ -571,25 +610,24 @@ const DestinationAdminDetails = () => {
                                 onClick={submitForm}
                                 className="mt-10 w-[700px] max-[800px]:w-[500px] max-[550px]:w-[320px] bg-[#1B4332] text-white font-semibold py-3 rounded-[5px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 text-[1em]"
                             >
-                                {loadingUpdateDestination ? "Enregistrement..." : "Sauvegarder les modifications"}
+                                {loadingAddDestination ? "Ajout..." : "Ajouter"}
                             </button>
 
                         </div>
-                }
 
-                <button
+
+                      <button
        
         onClick={() => navigate(-1)}
         className="absolute top-30 left-5 bg-[#1B4332] text-white w-[90px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 h-[35px] text-[15px] font-[600] rounded-full"
       >
         <i className="fa-solid fa-left-long"></i> Back
       </button>
+                    
+
             </section>
         </>
-    );
-};
+    )
+}
 
-
-export default memo(DestinationAdminDetails);
-
-
+export default memo(AddDestination);

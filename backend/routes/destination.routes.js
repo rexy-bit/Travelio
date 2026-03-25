@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination, updateDestination} from "../controllers/destination.controller.js";
+import { addDestination, getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination, updateDestination} from "../controllers/destination.controller.js";
 import authorize from "../middlewares/auth.middleware.js";
 import isAdmin from "../middlewares/admin.middleware.js";
 import multer from "multer";
@@ -11,7 +11,7 @@ const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/avif"];
     if (allowedTypes.includes(file.mimetype)) {
@@ -29,7 +29,7 @@ destinationRouter.get('/unique', getUniqueCitiesAndCountries);
 
 destinationRouter.get('/:id', getDestination);
 
-destinationRouter.post('/add', (req, res)=>res.send("Add destination"));
+destinationRouter.post('/add', authorize, isAdmin,upload.array("images"), addDestination);
 
 destinationRouter.put('/update/:id', authorize, isAdmin,upload.array("images"), updateDestination);
 
