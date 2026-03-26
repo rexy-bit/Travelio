@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addDestination, getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination, updateDestination} from "../controllers/destination.controller.js";
+import { addDestination, deleteDestination, getDestination, getDestinations , getUniqueCitiesAndCountries, searchDestination, updateDestination} from "../controllers/destination.controller.js";
 import authorize from "../middlewares/auth.middleware.js";
 import isAdmin from "../middlewares/admin.middleware.js";
 import multer from "multer";
@@ -11,7 +11,7 @@ const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/avif"];
     if (allowedTypes.includes(file.mimetype)) {
@@ -33,7 +33,7 @@ destinationRouter.post('/add', authorize, isAdmin,upload.array("images"), addDes
 
 destinationRouter.put('/update/:id', authorize, isAdmin,upload.array("images"), updateDestination);
 
-destinationRouter.delete('/delete/:id', (req, res)=>res.send("Delete destination"));
+destinationRouter.delete('/delete/:id', authorize, isAdmin, deleteDestination);
 
 
 

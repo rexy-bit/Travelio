@@ -530,3 +530,38 @@ addedDestination.attractions = Array.isArray(attractions)
         next(err);
     }
 }
+
+
+export const deleteDestination = async(req, res, next) => {
+
+    try{
+
+        const destinationId = req.params.id;
+
+        const existingDestination = await prisma.destination.findUnique({
+            where : {
+                id : destinationId
+            }
+        });
+
+        if(!existingDestination){
+            return res.status(404).json({
+                success: false,
+                message : "Error destination not found"
+            });
+        }
+        
+        await prisma.destination.delete({
+            where : {
+                id : destinationId
+            }
+        });
+
+        return res.status(200).json({
+            success : true,
+            message : "Destination deleted successfully"
+        });
+    }catch(err){
+        next(err);
+    }
+}

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useDestinationsContext } from "../Contexts/DestinationsContext";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -8,7 +9,8 @@ interface DestinationAdminContextType{
     loadingUpdateDestination: boolean;
     addDestination : (formData: FormData)=>Promise<void>;
     loadingAddDestination : boolean;
-    
+    deleteDestination : (id : string)=>void;
+    loadingDeleteDestination : boolean;
 }
 
 
@@ -18,6 +20,9 @@ export const DestinationAdminProvider = ({children} : {children : React.ReactNod
 
     const [loadingUpdateDestination, setLoadingUpdateDestination] = useState<boolean>(false);
     const [loadingAddDestination, setLoadingAddDestination] = useState<boolean>(false);
+    const [loadingDeleteDestination, setLoadingDeleteDestination] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const {getDestinations} = useDestinationsContext();
 //http://localhost:5000/api/v1/destination/update
@@ -66,6 +71,7 @@ export const DestinationAdminProvider = ({children} : {children : React.ReactNod
             }
 
             await getDestinations();
+            navigate("/admin/destinations");
         }catch(err){
             console.error(err);
         }finally{
@@ -74,8 +80,35 @@ export const DestinationAdminProvider = ({children} : {children : React.ReactNod
     }
 
 
+    const deleteDestination = async(id : string) => {
+
+        setLoadingDeleteDestination(true);
+        try{
+
+            const res = await fetch(`http://localhost:5000/api/v1/destination/delete/${id}`, {
+                method : "DELETE",
+                credentials : "include"
+            });
+
+            const data = await res.json();
+
+            if(!res.ok){
+                throw new Error(data.error || data.message || "Error in deleting destination");
+            }
+
+            await getDestinations();
+        }catch(err){
+            console.error(err);
+        }finally{
+            setLoadingDeleteDestination(false);
+        }
+    }
+
+
     return <DestinationAdminContext.Provider value={{loadingUpdateDestination, updateDestination,
-        addDestination, loadingAddDestination
+        addDestination, loadingAddDestination,
+        deleteDestination,
+        loadingDeleteDestination
     }}>
         {children}
     </DestinationAdminContext.Provider>

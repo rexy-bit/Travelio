@@ -30,10 +30,17 @@ export interface Hotel{
     nom : string;
     etoiles : number;
     pointsPositifs : string[];
+    destinationId : string,
+    destination : Destination,
+    trip : Trip[],
     createdAt : Date;
     updatedAt : Date;
 }
 
+export interface HotelFilter{
+    name : string;
+    city : string;
+}
 
 export interface Trip{
 

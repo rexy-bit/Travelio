@@ -27,6 +27,8 @@ import DestinationsAdmin from './AdminPages/DestinationsAdmin'
 import DestinationAdminDetails from './AdminPages/DestinationAdminDetails'
 import { DestinationAdminProvider } from './AdminContexts/DestinationAdminContext'
 import AddDestination from './AdminPages/AddDestination'
+import { HotelsAdminProvider } from './AdminContexts/HotelsAdminContext'
+import HotelsAdmin from './AdminPages/HotelsAdmin'
 
 function App() {
   
@@ -39,6 +41,7 @@ function App() {
             <FavoritesProvider>
               <UsersProvider>
                 <DestinationAdminProvider>
+                  <HotelsAdminProvider>
     <Routes>
 
       <Route element={
@@ -152,14 +155,19 @@ function App() {
         <Route path='addDestination' element={
           <AddDestination/>
         }/>
+
+        <Route path='hotels' element={
+          <HotelsAdmin/>
+        }/>
    
      </Route>
-
+ 
 
 
     </Routes>
 
 
+                     </HotelsAdminProvider>
                 </DestinationAdminProvider>
             </UsersProvider>
         </FavoritesProvider>

@@ -182,6 +182,27 @@ useEffect(()=>{
         });
  
         await addDestination(formData);
+        /*
+        setDestination({  id: "",
+        city: "",
+        country: "",
+        continent: "Europe",   // ← was ""
+        latitude: 0,
+        longitude: 0,
+        description: "",
+        bestSeason: "",
+        currency: "",
+        language: "",
+        timeZone: "UTC",       // ← was "" (fix this too)
+        attractions: [],
+        activities: [],
+        travelTips: [],
+        rating: 0,
+        averageTemperature: 0,
+        images: [],
+        createdAt: new Date(),
+        updatedAt: new Date()});
+        */
         
     };
 
@@ -450,6 +471,12 @@ useEffect(()=>{
                                         value={newAttraction}
                                         placeholder="Entrez votre attraction"
                                         onChange={(e) => setNewAttraction(e.target.value)}
+                                        onKeyDown={(e)=>{
+                                            if(e.key === "Enter"){
+                                                e.preventDefault();
+                                                addAttraction();
+                                            }
+                                        }}
                                         className="p-2 border border-gray-300 rounded-[5px] bg-gray-100 w-full"
                                     />
                                     <button
@@ -489,6 +516,12 @@ useEffect(()=>{
                                         value={newTip}
                                         placeholder="Entrez votre conseil"
                                         onChange={(e) => setNewTip(e.target.value)}
+                                        onKeyDown={(e)=>{
+                                            if(e.key === "Enter"){
+                                                e.preventDefault();
+                                                addNewTip();
+                                            }
+                                        }}
                                         className="p-2 border border-gray-300 rounded-[5px] bg-gray-100 w-full"
                                     />
                                     <button
@@ -528,6 +561,12 @@ useEffect(()=>{
                                         value={newActivity}
                                         placeholder="Entrez votre conseil"
                                         onChange={(e) => setNewActivity(e.target.value)}
+                                        onKeyDown={(e)=>{
+                                            if(e.key === "Enter"){
+                                                e.preventDefault();
+                                                addActivity();
+                                            }
+                                        }}
                                         className="p-2 border border-gray-300 rounded-[5px] bg-gray-100 w-full"
                                     />
                                     <button

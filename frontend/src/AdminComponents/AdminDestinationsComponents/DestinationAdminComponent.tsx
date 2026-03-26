@@ -1,13 +1,16 @@
-import { memo } from "react"
+import { memo, useState } from "react"
 import type { Destination } from '../../Contexts/Types';
 import Icon from "../../Icons/Icon";
 import { useNavigate } from "react-router-dom";
+import DeleteDestinationPop from "./DeleteDestinationPop";
 
 
 const DestinationAdminComponent = ({destination} : {destination : Destination}) => {
 
     const navigate = useNavigate();
+    const [showPop, setShowPop] = useState<boolean>(false);
     return(
+        <>
         <div className="w-[250px] flex flex-col bg-white shadow-2xl rounded-[10px] transition-transform duration-200 hover:scale-105">
 
             <img src={destination.images[0]}
@@ -35,7 +38,9 @@ const DestinationAdminComponent = ({destination} : {destination : Destination}) 
                         Details
                     </div>
 
-                    <div className="flex justify-center flex-row items-center py-2 gap-2 text-[15px] rounded-[10px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 font-semibold w-[120px] text-white bg-red-600/70">
+                    <div
+                    onClick={()=>setShowPop(true)}
+                    className="flex justify-center flex-row items-center py-2 gap-2 text-[15px] rounded-[10px] cursor-pointer transition-opacity duration-200 hover:opacity-80 active:opacity-60 font-semibold w-[120px] text-white bg-red-600/70">
                         <Icon name="Trash"/>
                         Delete
 
@@ -45,6 +50,10 @@ const DestinationAdminComponent = ({destination} : {destination : Destination}) 
              </div>
 
         </div>
+
+        {showPop && <DeleteDestinationPop setShowPop={setShowPop} destinationId={destination.id}/>}
+
+        </>
     )
 }
 

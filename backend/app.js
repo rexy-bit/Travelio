@@ -9,6 +9,7 @@ import tripRouter from "./routes/trip.routes.js";
 import reservationsRouter from "./routes/reservations.routes.js";
 import favoritesRouter from "./routes/favorites.routes.js";
 import usersRouter from "./routes/users.routes.js";
+import hotelRouter from "./routes/hotel.routes.js";
 
  const app = express();
 
@@ -32,6 +33,8 @@ app.use('/api/v1/trips', tripRouter);
 app.use('/api/v1/reservations', reservationsRouter);
 app.use('/api/v1/favorites', favoritesRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/hotels', hotelRouter
+);
 
 
 app.listen(PORT, async() => {

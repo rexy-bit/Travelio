@@ -89,7 +89,7 @@ model Reservation {
   trip      Trip              @relation(fields: [tripId], references: [id], onDelete: Cascade)
   user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, tripId])
+ 
 }
 
 
@@ -102,7 +102,7 @@ model Hotel {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   trips          Trip[]
-  destinationId  String ?
+  destinationId  String
   destination  Destination? @relation(fields : [destinationId], references: [id], onDelete: Cascade)
 
   @@index([destinationId])
